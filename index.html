@@ -52,9 +52,15 @@
 
     /* ヘッダー */
 
+    .hero-logo {
+      display: block; width: 100%; max-width: 230px; height: auto;
+      margin: 0 auto 14px; border-radius: 24px;
+      box-shadow: 0 6px 24px var(--shadow);
+    }
+
     .hero-wrap {
       text-align: center;
-      margin-bottom: 44px;
+      margin-bottom: 28px;
       animation: fadeUp .5s .05s both;
     }
 
@@ -249,6 +255,7 @@
 <body>
   <div class="container">
     <div class="hero-wrap">
+      <img class="hero-logo" src="img/logo.webp" width="720" height="720" alt="コラ100飲んで元気に歩こう">
       <h1 class="title">コラ100<br>運動アプリ</h1>
       <p class="subtitle">カメラで運動を自動的に記録します</p>
     </div>
@@ -296,7 +303,7 @@
       <strong>「ホーム画面に追加」</strong> を選んでください
     </div>
 
-    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.3.2</span></p>
+    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.4.0</span></p>
   </div>
 
   <script>
