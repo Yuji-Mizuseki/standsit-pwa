@@ -108,7 +108,7 @@
   <div class="card">
     <div class="bal-top">
       <div class="bal-icon" id="colIcon"></div>
-      <div><div class="bal-k">コラーゲンのハンコ</div><div style="font-size:14px;color:var(--text-mid);line-height:1.6">飲んだ日に1つ押しましょう</div></div>
+      <div><div class="bal-k">コラーゲンのハンコ</div><div style="font-size:14px;color:var(--text-mid);line-height:1.6">とった日に1つ押しましょう（飲み物でも料理でも）</div></div>
     </div>
     <button class="col-btn" id="colBtn"></button>
     <button class="photo-btn" id="photoBtn"></button>
@@ -178,7 +178,7 @@
     const colDays = new Set(col.map(e => e.date));
     const doneToday = colDays.has(todayKey);
     $('colBtn').className = 'col-btn' + (doneToday ? ' done' : '');
-    $('colBtn').innerHTML = doneToday ? '今日はハンコを押しました' : ICONS.stamp + '今日のコラーゲンを飲んだ';
+    $('colBtn').innerHTML = doneToday ? '今日はハンコを押しました' : ICONS.stamp + '今日のコラーゲンをとった';
     $('colUndo').style.display = doneToday ? 'block' : 'none';
     $('colMonth').textContent = [...colDays].filter(d => d.startsWith(ym)).length;
     let streak = 0;

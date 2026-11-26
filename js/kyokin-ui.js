@@ -30,9 +30,13 @@
       <path d="M6 30c5-12 9-12 12 0s7 12 12 0 7-12 12 0" stroke="${C.accent2}"/>
       <circle cx="12" cy="22" r="3" fill="${C.accent}" stroke="none"/><circle cx="24" cy="30" r="3" fill="${C.accent}" stroke="none"/><circle cx="36" cy="22" r="3" fill="${C.accent}" stroke="none"/></svg>`,
     // コラーゲン：グラスとしずく（オリジナル）
+    // 粉末コラーゲン：さじに盛った粉と、こぼれる粒（オリジナル）
     collagen: `<svg viewBox="0 0 48 48" fill="none" stroke="${C.line}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-      <path d="M13 12h22l-3 28H16z" fill="#fff"/><path d="M15 24h18l-1.6 16H16.6z" fill="${C.soft}" stroke="none"/>
-      <path d="M24 4c3 4 5 6 5 9a5 5 0 0 1-10 0c0-3 2-5 5-9z" fill="${C.accent2}" stroke="none"/></svg>`,
+      <path d="M27 31l15 9"/>
+      <path d="M6 28c0 6 6 9 12 9s13-3 13-8z" fill="#fff"/>
+      <path d="M8 28c1-6 6-10 11-10s10 4 11 10z" fill="${C.soft}" stroke="${C.accent2}" stroke-width="2.5"/>
+      <circle cx="14" cy="11" r="1.8" fill="${C.accent2}" stroke="none"/><circle cx="21" cy="8" r="1.8" fill="${C.accent2}" stroke="none"/>
+      <circle cx="27" cy="12" r="1.8" fill="${C.accent2}" stroke="none"/></svg>`,
     // 料理の写真：お皿とカメラの枠（オリジナル）
     dish: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
       <path d="M6 14V8h6M36 8h6v6M42 34v6h-6M12 40H6v-6"/><ellipse cx="24" cy="27" rx="13" ry="7"/><path d="M15 25c2-5 6-7 9-7s7 2 9 7"/></svg>`,
