@@ -1,16 +1,16 @@
 // 貯筋運動の画面部品：オリジナルのアイコン（SVG）と、動きの見本アニメ（棒人間）
 (function () {
-  const C = { line: '#1c2b45', accent: '#003884', accent2: '#3f7bd0', soft: '#e4eefb', mid: '#8b9ab3', seal: '#d9381e' };
+  const C = { line: '#1c2b45', accent: '#003884', accent2: '#3f7bd0', soft: '#e4eefb', mid: '#8b9ab3', seal: '#d9381e', vit: '#ffa000', vit2: '#ef6c00' };
 
   // ===== オリジナルアイコン（線画・アプリの配色） =====
   const ICONS = {
     // 座位：いすと座る人
     sit: `<svg viewBox="0 0 48 48" fill="none" stroke="${C.line}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="20" cy="9" r="4" fill="${C.accent2}" stroke="none"/>
+      <circle cx="20" cy="9" r="4" fill="${C.vit}" stroke="none"/>
       <path d="M20 27h9v12" stroke="${C.mid}"/><path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="${C.mid}"/></svg>`,
     // 立位：立つ人といすの背
     stand: `<svg viewBox="0 0 48 48" fill="none" stroke="${C.line}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="18" cy="8" r="4" fill="${C.accent2}" stroke="none"/>
+      <circle cx="18" cy="8" r="4" fill="${C.vit}" stroke="none"/>
       <path d="M18 14v14M18 28l-4 12M18 28l4 12M18 19l12 5"/><path d="M34 18v22M34 30h8M42 30v10" stroke="${C.mid}"/></svg>`,
     // 貯筋通帳：通帳と筋肉の山
     book: `<svg viewBox="0 0 48 48" fill="none" stroke="${C.line}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -99,7 +99,7 @@
         ${leg(A.legL, B.legL)}
         <polyline fill="none" stroke="${C.accent}" stroke-width="5" stroke-linecap="round" points="${A.legR.map(pt).join(' ')}">
           ${anim('points', A.legR.map(pt).join(' '), B.legR.map(pt).join(' '))}</polyline>
-        <circle cx="${A.head[0]}" cy="${A.head[1]}" r="8" fill="${C.accent2}"/>`;
+        <circle cx="${A.head[0]}" cy="${A.head[1]}" r="8" fill="${C.vit}"/>`;
     } else {
       const chain = q => [q.sh, q.hip, q.knee, q.ankle, q.toe].map(pt).join(' ');
       const arm = q => [q.sh, q.hand].map(pt).join(' ');
@@ -114,14 +114,14 @@
           ${anim('points', arm(A), arm(B))}</polyline>
         <polyline fill="none" stroke="${C.line}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="${chain(A)}">
           ${anim('points', chain(A), chain(B))}</polyline>
-        <circle r="8" fill="${C.accent2}" cx="${A.head[0]}" cy="${A.head[1]}">
+        <circle r="8" fill="${C.vit}" cx="${A.head[0]}" cy="${A.head[1]}">
           ${anim('cx', A.head[0], B.head[0])}${anim('cy', A.head[1], B.head[1])}</circle>`;
       // 動いている関節に印（どこを見て数えるか）
       const ex = K.EXERCISES.find(e => e.id === exId);
       const focus = { 'sit-toe': 'ankle', 'sit-heel': 'ankle', 'std-tiptoe': 'ankle', 'sit-knee': 'knee',
         'sit-thigh': 'hip', 'std-thigh': 'hip', 'std-chair': 'knee', 'sit-situp': 'hip', 'std-situp': 'hip' }[exId];
       if (ex && focus) {
-        body += `<circle r="5" fill="none" stroke="${C.accent}" stroke-width="2.5" cx="${A[focus][0]}" cy="${A[focus][1]}">
+        body += `<circle r="5" fill="none" stroke="${C.vit2}" stroke-width="2.5" cx="${A[focus][0]}" cy="${A[focus][1]}">
           ${anim('cx', A[focus][0], B[focus][0])}${anim('cy', A[focus][1], B[focus][1])}</circle>`;
       }
     }

@@ -11,7 +11,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:       #f5f9ff;
+      --bg:       #ffffff;
       --bg2:      #e4eefb;
       --primary:  #003884;
       --primary2: #3f7bd0;
@@ -94,7 +94,7 @@
     }
     .btn-launch.ready { opacity: 1; pointer-events: auto; }
     .btn-launch.speed-ready { background: linear-gradient(135deg, var(--speed), var(--speed2)); color: var(--white); }
-    .btn-launch.count-ready { background: linear-gradient(135deg, var(--count), var(--count2)); color: var(--white); }
+    .btn-launch.count-ready { background: linear-gradient(135deg, #ef6c00, #ffa000); color: var(--white); }
     .back-link {
       margin-top: 16px;
       display: flex; align-items: center; gap: 6px;
@@ -224,7 +224,7 @@
       cursor: pointer; text-align: center; text-decoration: none;
       display: flex; align-items: center; justify-content: center;
     }
-    .cbtn-save { background: linear-gradient(135deg, var(--count), var(--count2)); color: #fff; box-shadow: 0 4px 18px var(--shadow); }
+    .cbtn-save { background: linear-gradient(135deg, #ef6c00, #ffa000); color: #fff; box-shadow: 0 4px 18px var(--shadow); }
     .cbtn-save:disabled { opacity: .5; cursor: default; }
     .cbtn-retry {
       background: rgba(255,255,255,.9); color: var(--text);
@@ -295,7 +295,7 @@
       cursor: pointer; transition: all .18s cubic-bezier(.34,1.56,.64,1);
     }
     .btn:active { transform: scale(.96); }
-    .btn-sc  { background: linear-gradient(135deg, var(--count), var(--count2)); color: #fff; box-shadow: 0 4px 16px var(--shadow); }
+    .btn-sc  { background: linear-gradient(135deg, #ef6c00, #ffa000); color: #fff; box-shadow: 0 4px 16px var(--shadow); }
     .btn-ss  { background: linear-gradient(135deg, var(--speed), var(--speed2)); color: #fff; box-shadow: 0 4px 16px rgba(217,123,0,.25); }
     .btn-stop { background: linear-gradient(135deg, var(--danger), #e05555); color: #fff; box-shadow: 0 4px 16px rgba(204,51,51,.25); }
     .btn-reset {

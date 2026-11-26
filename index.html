@@ -15,7 +15,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:      #f5f9ff;
+      --bg:      #ffffff;
       --bg2:     #e4eefb;
       --primary: #003884;
       --primary2:#3f7bd0;
@@ -36,8 +36,7 @@
 
     body {
       background:
-        radial-gradient(ellipse at 80% 0%, rgba(91,143,216,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 10% 100%, rgba(0,56,132,0.10) 0%, transparent 50%),
+        radial-gradient(ellipse at 85% 0%, rgba(255,160,0,0.10) 0%, transparent 45%),
         var(--bg);
     }
 
@@ -165,6 +164,7 @@
     }
 
     .card-arrow {
+      color: #ef6c00 !important;
       font-size: 22px;
       color: var(--primary2);
     }
@@ -263,7 +263,7 @@
     <div class="nav-cards">
       <!-- 「運動を始める」（measure.html・いす座り立ち10回のテスト）はトップから外した。画面と記録は残してある（2026-11-26） -->
       <a class="nav-card primary" href="kyokin.html">
-        <div class="card-icon"><svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="#1c2b45" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="9" r="4" fill="#3f7bd0" stroke="none"/><path d="M20 27h9v12" stroke="#8b9ab3"/><path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="#8b9ab3"/><path d="M38 8v8M34 12h8" stroke="#003884"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="#1c2b45" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="9" r="4" fill="#ffa000" stroke="none"/><path d="M20 27h9v12" stroke="#8b9ab3"/><path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="#8b9ab3"/><path d="M38 8v8M34 12h8" stroke="#003884"/></svg></div>
         <div class="card-text">
           <div class="card-title">貯筋運動</div>
           <div class="card-desc">10種目をカメラで数えて採点します</div>
@@ -303,7 +303,7 @@
       <strong>「ホーム画面に追加」</strong> を選んでください
     </div>
 
-    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.5.0</span></p>
+    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.6.0</span></p>
   </div>
 
   <script>

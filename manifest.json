@@ -4,7 +4,7 @@
   "description": "カメラで貯筋運動を数えて、貯筋通帳に記録するアプリ",
   "start_url": "/standsit-pwa/index.html",
   "display": "standalone",
-  "background_color": "#f5f9ff",
+  "background_color": "#ffffff",
   "theme_color": "#003884",
   "orientation": "portrait",
   "icons": [

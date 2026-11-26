@@ -11,7 +11,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg: #f5f9ff; --bg2: #e4eefb;
+      --bg: #ffffff; --bg2: #e4eefb;
       --primary: #003884; --primary2: #3f7bd0;
       --speed: #d97b00; --speed2: #f0a030;
       --text: #1c2b45; --text-mid: #4d5d78; --text-dim: #8b9ab3;
@@ -59,7 +59,7 @@
     .ex-name { font-size: 17px; font-weight: 900; margin-bottom: 3px; }
     .ex-sub { font-size: 12.5px; color: var(--text-mid); line-height: 1.5; }
     .cam-tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 100px; margin-left: 4px; background: var(--bg2); color: var(--text-mid); vertical-align: 2px; }
-    .must-tag { display: inline-block; font-size: 11px; font-weight: 900; padding: 1px 8px; border-radius: 100px; margin-right: 4px; background: var(--primary); color: #fff; vertical-align: 2px; }
+    .must-tag { display: inline-block; font-size: 11px; font-weight: 900; padding: 1px 8px; border-radius: 100px; margin-right: 4px; background: #ef6c00; color: #fff; vertical-align: 2px; }
     .must-note { font-size: 12.5px; color: var(--text-mid); margin: -2px 4px 10px; line-height: 1.6; }
     .cam-tag.front { background: rgba(217,123,0,.15); color: var(--speed); }
     .detail {
@@ -76,7 +76,7 @@
     .btn-launch {
       width: 100%; margin-top: 16px; padding: 20px; border: none; border-radius: 100px;
       font-size: 20px; font-weight: 900; font-family: inherit; cursor: pointer; color: #fff;
-      background: linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow: 0 4px 20px var(--shadow);
+      background: linear-gradient(135deg, #ef6c00, #ffa000); box-shadow: 0 4px 20px rgba(239,108,0,.3);
       opacity: .3; pointer-events: none; transition: all .2s;
     }
     .btn-launch.ready { opacity: 1; pointer-events: auto; }
@@ -108,7 +108,7 @@
     .big-label { font-size: 16px; font-weight: 700; color: rgba(255,255,255,.8); letter-spacing: .1em; margin-top: 6px; text-shadow: 0 1px 6px rgba(0,0,0,.4); }
     .set-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
     .set-dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,.8); }
-    .set-dots i.done { background: var(--primary2); border-color: var(--primary2); }
+    .set-dots i.done { background: #ffb300; border-color: #ffb300; }
 
     /* 動きの大きさゲージ（右端） */
     .gauge { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); width: 26px; height: 46vh; z-index: 20;
@@ -140,7 +140,7 @@
     .btn-row { display: flex; gap: 12px; margin-bottom: 12px; }
     .btn { flex: 1; padding: 18px; border: none; border-radius: 18px; font-size: 18px; font-weight: 900; font-family: inherit; cursor: pointer; transition: all .18s cubic-bezier(.34,1.56,.64,1); }
     .btn:active { transform: scale(.96); }
-    .btn-go { background: linear-gradient(135deg, var(--primary), var(--primary2)); color: #fff; box-shadow: 0 4px 16px var(--shadow); }
+    .btn-go { background: linear-gradient(135deg, #ef6c00, #ffa000); color: #fff; box-shadow: 0 4px 16px rgba(239,108,0,.3); }
     .btn-stop { background: linear-gradient(135deg, var(--danger), #e05555); color: #fff; }
     .btn-sub { flex: 0 0 auto; padding: 18px 18px; background: var(--bg2); color: var(--text-mid); font-size: 16px; }
     .controls-panel.measuring .btn { padding: 12px; font-size: 15px; }
@@ -156,7 +156,7 @@
     #sideOverlay.show { display: flex; }
     .so-side { font-size: 64px; font-weight: 900; color: #ffe066; line-height: 1; text-shadow: 0 2px 12px rgba(0,0,0,.5); }
     .so-text { font-size: 18px; font-weight: 700; color: #fff; line-height: 1.7; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
-    .so-btn { width: 100%; max-width: 320px; padding: 18px; border: none; border-radius: 100px; font-size: 19px; font-weight: 900; font-family: inherit; cursor: pointer; color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow: 0 4px 18px var(--shadow); }
+    .so-btn { width: 100%; max-width: 320px; padding: 18px; border: none; border-radius: 100px; font-size: 19px; font-weight: 900; font-family: inherit; cursor: pointer; color: #fff; background: linear-gradient(135deg, #ef6c00, #ffa000); box-shadow: 0 4px 18px rgba(239,108,0,.3); }
     /* ===== まとめ（透明オーバーレイ・カメラが見える） ===== */
     #summary { position: fixed; inset: 0; z-index: 50; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 30px 26px; background: rgba(0,0,0,.35); }
     #summary.show { display: flex; }
@@ -174,7 +174,7 @@
     .sm-msg { font-size: 15px; color: #fff; text-align: center; line-height: 1.6; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
     .sm-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; }
     .cbtn { width: 100%; padding: 17px; border: none; border-radius: 100px; font-size: 18px; font-weight: 900; font-family: inherit; cursor: pointer; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; }
-    .cbtn-save { background: linear-gradient(135deg, var(--primary), var(--primary2)); color: #fff; box-shadow: 0 4px 18px var(--shadow); }
+    .cbtn-save { background: linear-gradient(135deg, #ef6c00, #ffa000); color: #fff; box-shadow: 0 4px 18px rgba(239,108,0,.3); }
     .cbtn-save:disabled { opacity: .55; }
     .cbtn-retry { background: rgba(255,255,255,.92); color: var(--text); }
     .cbtn-home { background: transparent; color: rgba(255,255,255,.85); font-size: 15px; padding: 10px; text-shadow: 0 1px 4px rgba(0,0,0,.5); }
