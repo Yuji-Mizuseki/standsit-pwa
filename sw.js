@@ -1,4 +1,4 @@
-const CACHE_NAME = 'standsit-v41';
+const CACHE_NAME = 'standsit-v42';
 
 const BASE = '/standsit-pwa';
 
@@ -18,7 +18,7 @@ const PRECACHE_URLS = [
   BASE + '/icon-512.png',
   BASE + '/icon-maskable-192.png',
   BASE + '/icon-maskable-512.png',
-  BASE + '/img/logo-text-w.webp',
+  BASE + '/img/logo-text-w2.webp',
   BASE + '/img/visual-c.webp',
   BASE + '/img/btn-kyokin.webp',
   BASE + '/img/btn-tsucho.webp',
