@@ -5,26 +5,26 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>計測 - コラ100運動アプリ</title>
   <link rel="manifest" href="/standsit-pwa/manifest.json" />
-  <meta name="theme-color" content="#fff8f5" />
+  <meta name="theme-color" content="#f5f9ff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:       #fff8f5;
-      --bg2:      #ffeee6;
-      --primary:  #e8613a;
-      --primary2: #f4956e;
+      --bg:       #f5f9ff;
+      --bg2:      #e4eefb;
+      --primary:  #003884;
+      --primary2: #3f7bd0;
       --speed:    #d97b00;
       --speed2:   #f0a030;
-      --count:    #e8613a;
-      --count2:   #f4956e;
-      --text:     #3a2820;
-      --text-mid: #7a5a4e;
-      --text-dim: #b09080;
+      --count:    #003884;
+      --count2:   #3f7bd0;
+      --text:     #1c2b45;
+      --text-mid: #4d5d78;
+      --text-dim: #8b9ab3;
       --white:    #ffffff;
       --danger:   #cc3333;
-      --shadow:   rgba(232,97,58,0.15);
+      --shadow:   rgba(0,56,132,0.15);
     }
     html, body {
       height: 100%;
@@ -63,10 +63,10 @@
       border-color: var(--speed); background: #fffbf0;
       box-shadow: 0 6px 24px rgba(217,123,0,.2);
     }
-    .mode-card.count { border-color: rgba(232,97,58,.2); }
+    .mode-card.count { border-color: rgba(0,56,132,.2); }
     .mode-card.count:hover, .mode-card.count.selected {
-      border-color: var(--count); background: #fff5f2;
-      box-shadow: 0 6px 24px rgba(232,97,58,.18);
+      border-color: var(--count); background: #eef4fd;
+      box-shadow: 0 6px 24px rgba(0,56,132,.18);
     }
     .mc-icon {
       font-size: 38px; flex-shrink: 0;
@@ -82,7 +82,7 @@
       border-radius: 100px; flex-shrink: 0;
     }
     .mc-badge.speed { background: rgba(217,123,0,.15); color: var(--speed); border: 1.5px solid rgba(217,123,0,.4); }
-    .mc-badge.count { background: rgba(232,97,58,.12); color: var(--count); border: 1.5px solid rgba(232,97,58,.35); }
+    .mc-badge.count { background: rgba(0,56,132,.12); color: var(--count); border: 1.5px solid rgba(0,56,132,.35); }
     .btn-launch {
       width: 100%; max-width: 360px;
       padding: 20px; border: none; border-radius: 100px;
@@ -99,7 +99,7 @@
       margin-top: 16px;
       display: flex; align-items: center; gap: 6px;
       padding: 12px 20px;
-      background: var(--white); border: 1.5px solid rgba(58,40,32,.15);
+      background: var(--white); border: 1.5px solid rgba(28,43,69,.15);
       border-radius: 100px; color: var(--text-mid);
       font-size: 15px; font-weight: 700; text-decoration: none;
     }
@@ -141,7 +141,7 @@
       margin-left: 6px; font-weight: 700; vertical-align: middle;
     }
     .mode-tag.speed { background: rgba(217,123,0,.85); color: #fff; }
-    .mode-tag.count { background: rgba(232,97,58,.85); color: #fff; }
+    .mode-tag.count { background: rgba(0,56,132,.85); color: #fff; }
     .flip-btn {
       padding: 10px 14px;
       background: rgba(255,255,255,.9);
@@ -193,7 +193,7 @@
       background: rgba(255,255,255,.9); color: #cc3333;
     }
     .state-badge.standing {
-      background: rgba(232,97,58,.9); color: #fff;
+      background: rgba(0,56,132,.9); color: #fff;
     }
     /* ===== 完了オーバーレイ ===== */
     #completeOverlay {
@@ -228,7 +228,7 @@
     .cbtn-save:disabled { opacity: .5; cursor: default; }
     .cbtn-retry {
       background: rgba(255,255,255,.9); color: var(--text);
-      border: 2px solid rgba(58,40,32,.2);
+      border: 2px solid rgba(28,43,69,.2);
       box-shadow: 0 2px 10px rgba(0,0,0,.2);
     }
     .cbtn-home {
@@ -576,8 +576,8 @@
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (!results.poseLandmarks) return;
 
-    const lc = selectedMode === 'speed' ? 'rgba(255,200,50,.6)' : 'rgba(244,149,110,.6)';
-    const dc = selectedMode === 'speed' ? 'rgba(255,200,50,.95)' : 'rgba(244,149,110,.95)';
+    const lc = selectedMode === 'speed' ? 'rgba(255,200,50,.6)' : 'rgba(63,123,208,.6)';
+    const dc = selectedMode === 'speed' ? 'rgba(255,200,50,.95)' : 'rgba(63,123,208,.95)';
     drawConnectors(ctx, results.poseLandmarks, POSE_CONNECTIONS, { color:lc, lineWidth:3 });
     drawLandmarks(ctx, results.poseLandmarks, { color:dc, radius:4, lineWidth:1 });
 

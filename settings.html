@@ -5,22 +5,22 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>設定 - コラ100運動アプリ</title>
   <link rel="manifest" href="/standsit-pwa/manifest.json" />
-  <meta name="theme-color" content="#fff8f5" />
+  <meta name="theme-color" content="#f5f9ff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
-      --bg:      #fff8f5;
-      --bg2:     #ffeee6;
-      --primary: #e8613a;
-      --primary2:#f4956e;
-      --accent:  #f0a070;
-      --text:    #3a2820;
-      --text-mid:#7a5a4e;
-      --text-dim:#b09080;
+      --bg:      #f5f9ff;
+      --bg2:     #e4eefb;
+      --primary: #003884;
+      --primary2:#3f7bd0;
+      --accent:  #5b8fd8;
+      --text:    #1c2b45;
+      --text-mid:#4d5d78;
+      --text-dim:#8b9ab3;
       --white:   #ffffff;
-      --shadow:  rgba(232,97,58,0.18);
+      --shadow:  rgba(0,56,132,0.18);
     }
     html, body {
       min-height: 100%;
@@ -30,8 +30,8 @@
     }
     body {
       background:
-        radial-gradient(ellipse at 80% 0%, rgba(240,160,112,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 10% 100%, rgba(232,97,58,0.10) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 0%, rgba(91,143,216,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 10% 100%, rgba(0,56,132,0.10) 0%, transparent 50%),
         var(--bg);
     }
     .container {
@@ -105,7 +105,7 @@
     .sens-card:active { transform: scale(.97); }
     .sens-card.selected {
       border-color: var(--primary);
-      background: #fff5f2;
+      background: #eef4fd;
       box-shadow: 0 4px 18px var(--shadow);
     }
     .sens-icon {
@@ -122,7 +122,7 @@
     .sens-check {
       width: 26px; height: 26px;
       border-radius: 50%;
-      border: 3px solid rgba(58,40,32,.2);
+      border: 3px solid rgba(28,43,69,.2);
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
       transition: all .2s;
@@ -154,7 +154,7 @@
     .net-card:active { transform: scale(.97); }
     .net-card.selected {
       border-color: var(--primary);
-      background: #fff5f2;
+      background: #eef4fd;
       box-shadow: 0 4px 18px var(--shadow);
     }
     .net-icon {
@@ -171,7 +171,7 @@
     .net-check {
       width: 26px; height: 26px;
       border-radius: 50%;
-      border: 3px solid rgba(58,40,32,.2);
+      border: 3px solid rgba(28,43,69,.2);
       display: flex; align-items: center; justify-content: center;
       flex-shrink: 0;
       transition: all .2s;

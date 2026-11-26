@@ -1,6 +1,6 @@
 // 貯筋運動の画面部品：オリジナルのアイコン（SVG）と、動きの見本アニメ（棒人間）
 (function () {
-  const C = { line: '#3a2820', accent: '#e8613a', accent2: '#f4956e', soft: '#ffeee6', mid: '#b09080' };
+  const C = { line: '#1c2b45', accent: '#003884', accent2: '#3f7bd0', soft: '#e4eefb', mid: '#8b9ab3', seal: '#d9381e' };
 
   // ===== オリジナルアイコン（線画・アプリの配色） =====
   const ICONS = {
@@ -22,9 +22,9 @@
       <circle cx="24" cy="26" r="7"/><circle cx="24" cy="26" r="2" fill="${C.accent}" stroke="none"/></svg>`,
     // ハンコ：朱の丸印に力こぶ（オリジナル）
     stamp: `<svg viewBox="0 0 48 48" fill="none" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="24" cy="24" r="18" stroke="${C.accent}" stroke-width="3.5"/>
-      <circle cx="24" cy="24" r="13.5" stroke="${C.accent}" stroke-width="1.5" opacity=".6"/>
-      <path d="M15 30c1-6 4-11 8-12 2 0 3 2 2 4-1 1-3 1-3 3 2 1 6 0 9-1 2 0 3 2 2 4-3 2-12 3-18 2z" fill="${C.accent}"/></svg>`,
+      <circle cx="24" cy="24" r="18" stroke="${C.seal}" stroke-width="3.5"/>
+      <circle cx="24" cy="24" r="13.5" stroke="${C.seal}" stroke-width="1.5" opacity=".6"/>
+      <path d="M15 30c1-6 4-11 8-12 2 0 3 2 2 4-1 1-3 1-3 3 2 1 6 0 9-1 2 0 3 2 2 4-3 2-12 3-18 2z" fill="${C.seal}"/></svg>`,
     // ふつうのはやさ：リズム（拍の点）
     rhythm: `<svg viewBox="0 0 48 48" fill="none" stroke="${C.line}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
       <path d="M6 30c5-12 9-12 12 0s7 12 12 0 7-12 12 0" stroke="${C.accent2}"/>
@@ -42,8 +42,8 @@
       <path d="M6 14V8h6M36 8h6v6M42 34v6h-6M12 40H6v-6"/><ellipse cx="24" cy="27" rx="13" ry="7"/><path d="M15 25c2-5 6-7 9-7s7 2 9 7"/></svg>`,
     // ハンコ1つ分（通帳のマス用）：押してある／まだ
     seal: on => on
-      ? `<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="${C.accent}" stroke-width="3" transform="rotate(-8 20 20)"/>
-          <path d="M12 25c1-5 3-9 7-10 2 0 2 2 1 3-1 1-2 1-2 3 2 1 5 0 7-1 2 0 2 2 1 3-2 2-9 3-14 2z" fill="${C.accent}"/></svg>`
+      ? `<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" fill="none" stroke="${C.seal}" stroke-width="3" transform="rotate(-8 20 20)"/>
+          <path d="M12 25c1-5 3-9 7-10 2 0 2 2 1 3-1 1-2 1-2 3 2 1 5 0 7-1 2 0 2 2 1 3-2 2-9 3-14 2z" fill="${C.seal}"/></svg>`
       : `<svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="15" fill="none" stroke="${C.mid}" stroke-width="1.5" stroke-dasharray="3 3" opacity=".6"/></svg>`,
     // ゆっくり：砂時計
     slow: `<svg viewBox="0 0 48 48" fill="none" stroke="${C.line}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">

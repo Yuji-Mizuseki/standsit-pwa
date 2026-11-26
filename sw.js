@@ -1,4 +1,4 @@
-const CACHE_NAME = 'standsit-v27';
+const CACHE_NAME = 'standsit-v28';
 
 const BASE = '/standsit-pwa';
 
@@ -16,6 +16,8 @@ const PRECACHE_URLS = [
   BASE + '/manifest.json',
   BASE + '/icon-192.png',
   BASE + '/icon-512.png',
+  BASE + '/icon-maskable-192.png',
+  BASE + '/icon-maskable-512.png',
   BASE + '/img/logo.webp',
   // MediaPipe
   BASE + '/mediapipe/camera_utils/camera_utils.js',

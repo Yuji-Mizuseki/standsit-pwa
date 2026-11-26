@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>コラ100運動アプリ</title>
   <link rel="manifest" href="/standsit-pwa/manifest.json" />
-  <meta name="theme-color" content="#fff8f5" />
+  <meta name="theme-color" content="#f5f9ff" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="コラ100運動" />
@@ -15,16 +15,16 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --bg:      #fff8f5;
-      --bg2:     #ffeee6;
-      --primary: #e8613a;
-      --primary2:#f4956e;
-      --accent:  #f0a070;
-      --text:    #3a2820;
-      --text-mid:#7a5a4e;
-      --text-dim:#b09080;
+      --bg:      #f5f9ff;
+      --bg2:     #e4eefb;
+      --primary: #003884;
+      --primary2:#3f7bd0;
+      --accent:  #5b8fd8;
+      --text:    #1c2b45;
+      --text-mid:#4d5d78;
+      --text-dim:#8b9ab3;
       --white:   #ffffff;
-      --shadow:  rgba(232,97,58,0.18);
+      --shadow:  rgba(0,56,132,0.18);
     }
 
     html, body {
@@ -36,8 +36,8 @@
 
     body {
       background:
-        radial-gradient(ellipse at 80% 0%, rgba(240,160,112,0.18) 0%, transparent 55%),
-        radial-gradient(ellipse at 10% 100%, rgba(232,97,58,0.10) 0%, transparent 50%),
+        radial-gradient(ellipse at 80% 0%, rgba(91,143,216,0.18) 0%, transparent 55%),
+        radial-gradient(ellipse at 10% 100%, rgba(0,56,132,0.10) 0%, transparent 50%),
         var(--bg);
     }
 
@@ -129,11 +129,11 @@
       box-shadow: 0 2px 10px var(--shadow);
     }
 
-    .nav-card.primary { border-color: rgba(232,97,58,.25); }
+    .nav-card.primary { border-color: rgba(0,56,132,.25); }
 
     .nav-card.primary:hover { border-color: var(--primary); box-shadow: 0 8px 32px var(--shadow); }
 
-    .nav-card.secondary { border-color: rgba(240,160,112,.3); }
+    .nav-card.secondary { border-color: rgba(91,143,216,.3); }
 
     .nav-card.secondary:hover { border-color: var(--accent); }
 
@@ -201,7 +201,7 @@
       margin-top: 18px;
       padding: 16px 20px;
       background: var(--white);
-      border: 2px solid rgba(232,97,58,.3);
+      border: 2px solid rgba(0,56,132,.3);
       border-radius: 20px;
       font-size: 14px;
       color: var(--text-mid);
@@ -225,7 +225,7 @@
       width: 100%;
       max-width: 360px;
       background: var(--white);
-      border: 2px solid rgba(58,40,32,.12);
+      border: 2px solid rgba(28,43,69,.12);
       border-radius: 100px;
       color: var(--text-mid);
       font-size: 16px; font-weight: 700;
@@ -263,7 +263,7 @@
     <div class="nav-cards">
       <!-- 「運動を始める」（measure.html・いす座り立ち10回のテスト）はトップから外した。画面と記録は残してある（2026-11-26） -->
       <a class="nav-card primary" href="kyokin.html">
-        <div class="card-icon"><svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="#3a2820" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="9" r="4" fill="#f4956e" stroke="none"/><path d="M20 27h9v12" stroke="#b09080"/><path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="#b09080"/><path d="M38 8v8M34 12h8" stroke="#e8613a"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="#1c2b45" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="9" r="4" fill="#3f7bd0" stroke="none"/><path d="M20 27h9v12" stroke="#8b9ab3"/><path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="#8b9ab3"/><path d="M38 8v8M34 12h8" stroke="#003884"/></svg></div>
         <div class="card-text">
           <div class="card-title">貯筋運動</div>
           <div class="card-desc">10種目をカメラで数えて採点します</div>
@@ -272,7 +272,7 @@
       </a>
 
       <a class="nav-card secondary" href="tsucho.html">
-        <div class="card-icon"><svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="#3a2820" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="6" width="30" height="36" rx="4" fill="#fff"/><path d="M9 14h30" stroke="#e8613a"/><path d="M15 34l6-8 5 5 7-10" stroke="#e8613a"/></svg></div>
+        <div class="card-icon"><svg viewBox="0 0 48 48" width="40" height="40" fill="none" stroke="#1c2b45" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="6" width="30" height="36" rx="4" fill="#fff"/><path d="M9 14h30" stroke="#003884"/><path d="M15 34l6-8 5 5 7-10" stroke="#003884"/></svg></div>
         <div class="card-text">
           <div class="card-title">貯筋通帳</div>
           <div class="card-desc">運動とコラーゲンのハンコを押します</div>
@@ -303,7 +303,7 @@
       <strong>「ホーム画面に追加」</strong> を選んでください
     </div>
 
-    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.4.0</span></p>
+    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.5.0</span></p>
   </div>
 
   <script>
