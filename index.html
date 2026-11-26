@@ -34,11 +34,7 @@
       font-family: 'Noto Sans JP', sans-serif;
     }
 
-    body {
-      background:
-        radial-gradient(ellipse at 85% 0%, rgba(255,160,0,0.10) 0%, transparent 45%),
-        var(--bg);
-    }
+    body { background: #ffffff; }
 
     .container {
       min-height: 100vh;
@@ -255,15 +251,11 @@
     .card-icon { color: #fff; }
 
     /* ===== トップ v1.8（ChatGPT のデザイン案をもとに） ===== */
-    body {
-      background:
-        radial-gradient(120% 60% at 0% 0%, rgba(63,123,208,.16) 0%, transparent 40%),
-        radial-gradient(120% 50% at 100% 100%, rgba(255,160,0,.14) 0%, transparent 40%),
-        #ffffff;
-    }
+    body { background: #ffffff; }
     .container { justify-content: flex-start; padding-top: 28px; }
     .hero-wrap { margin-bottom: 16px; }
-    .hero-logo { max-width: 230px; margin-bottom: 4px; border-radius: 0; box-shadow: none; filter: drop-shadow(0 6px 14px rgba(0,56,132,.22)); }
+    .hero-text { display: block; width: 100%; max-width: 330px; height: auto; margin: 0 auto 2px; }
+    .hero-visual { display: block; width: 100%; max-width: 340px; height: auto; margin: 0 auto; }
     .app-name {
       display: inline-block; font-size: 28px; font-weight: 900; color: #003884; letter-spacing: .02em;
       padding-bottom: 6px;
@@ -307,7 +299,8 @@
 <body>
   <div class="container">
     <div class="hero-wrap">
-      <img class="hero-logo" src="img/logo-v2.webp" width="640" height="640" alt="コラ100飲んで元気に歩こう（コラ100運動アプリ）">
+      <img class="hero-text" src="img/logo-text.webp" width="900" height="385" alt="コラ100飲んで元気に歩こう（コラ100運動アプリ）">
+      <img class="hero-visual" src="img/visual.webp" width="790" height="506" alt="元気に歩く男女と、粉末コラーゲンを盛ったスプーン">
     </div>
 
     <!-- 今日のひとこと：貯筋通帳の記録から（端末の中のデータ） -->
@@ -337,7 +330,7 @@
       <strong>「ホーム画面に追加」</strong> を選んでください
     </div>
 
-    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.8.1</span></p>
+    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.9.0</span></p>
   </div>
 
   <script>
