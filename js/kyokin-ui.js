@@ -6,11 +6,11 @@
   const ICONS = {
     // 座位：いすと座る人
     sit: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="20" cy="9" r="4" fill="${C.vit}" stroke="none"/>
+      <circle cx="20" cy="9" r="4" fill="currentColor" stroke="none"/>
       <path d="M20 27h9v12" stroke="${C.mid}"/><path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="${C.mid}"/></svg>`,
     // 立位：立つ人といすの背
     stand: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-      <circle cx="18" cy="8" r="4" fill="${C.vit}" stroke="none"/>
+      <circle cx="18" cy="8" r="4" fill="currentColor" stroke="none"/>
       <path d="M18 14v14M18 28l-4 12M18 28l4 12M18 19l12 5"/><path d="M34 18v22M34 30h8M42 30v10" stroke="${C.mid}"/></svg>`,
     // 貯筋通帳：通帳と筋肉の山
     book: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
@@ -99,7 +99,7 @@
         ${leg(A.legL, B.legL)}
         <polyline fill="none" stroke="${C.vit}" stroke-width="5" stroke-linecap="round" points="${A.legR.map(pt).join(' ')}">
           ${anim('points', A.legR.map(pt).join(' '), B.legR.map(pt).join(' '))}</polyline>
-        <circle cx="${A.head[0]}" cy="${A.head[1]}" r="8" fill="${C.vit}"/>`;
+        <circle cx="${A.head[0]}" cy="${A.head[1]}" r="8" fill="#fff"/>`;
     } else {
       const chain = q => [q.sh, q.hip, q.knee, q.ankle, q.toe].map(pt).join(' ');
       const arm = q => [q.sh, q.hand].map(pt).join(' ');
@@ -114,7 +114,7 @@
           ${anim('points', arm(A), arm(B))}</polyline>
         <polyline fill="none" stroke="#fff" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="${chain(A)}">
           ${anim('points', chain(A), chain(B))}</polyline>
-        <circle r="8" fill="${C.vit}" cx="${A.head[0]}" cy="${A.head[1]}">
+        <circle r="8" fill="#fff" cx="${A.head[0]}" cy="${A.head[1]}">
           ${anim('cx', A.head[0], B.head[0])}${anim('cy', A.head[1], B.head[1])}</circle>`;
       // 動いている関節に印（どこを見て数えるか）
       const ex = K.EXERCISES.find(e => e.id === exId);
