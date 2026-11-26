@@ -253,7 +253,8 @@
     .container { justify-content: flex-start; padding-top: 28px; }
     .hero-wrap { margin-bottom: 16px; }
     .hero-text { display: block; width: 100%; max-width: 330px; height: auto; margin: 0 auto 2px; }
-    .hero-visual { display: block; width: 100%; max-width: 340px; height: auto; margin: 0 auto; }
+    .hero-visual { display: block; width: calc(100% + 28px); max-width: 420px; height: auto; margin: 0 -28px 0 auto; align-self: flex-end; }
+    .hero-wrap { width: 100%; }
     .app-name {
       display: inline-block; font-size: 28px; font-weight: 900; color: #003884; letter-spacing: .02em;
       padding-bottom: 6px;
@@ -298,9 +299,7 @@
     body {
       position: relative; overflow-x: hidden;
       background:
-        radial-gradient(140% 70% at 50% 108%, rgba(255,160,0,.20) 0%, transparent 38%),
-        radial-gradient(160% 60% at 50% 112%, rgba(63,123,208,.22) 0%, transparent 45%),
-        linear-gradient(180deg, #d6eeff 0%, #ebf7ff 30%, #ffffff 58%, #ffffff 100%);
+        linear-gradient(180deg, #cfeaff 0px, #e4f4ff 150px, #ffffff 300px, #ffffff 100%);
       background-attachment: scroll;
     }
     .bubbles { position: absolute; inset: 0; pointer-events: none; overflow: hidden; z-index: 0; }
@@ -324,10 +323,7 @@
     <i style="left:84%;top:40px;width:22px;height:22px"></i>
     <i style="left:88%;top:210px;width:40px;height:40px"></i>
     <i style="left:2%;top:330px;width:18px;height:18px"></i>
-    <i style="left:78%;top:420px;width:16px;height:16px"></i>
-    <i style="left:8%;top:560px;width:26px;height:26px"></i>
     <span class="sparkle" style="left:12%;top:150px">✦</span>
-    <span class="sparkle" style="left:86%;top:330px;font-size:14px">✦</span>
   </div>
   <div class="container">
     <div class="hero-wrap">
@@ -362,7 +358,7 @@
       <strong>「ホーム画面に追加」</strong> を選んでください
     </div>
 
-    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.10.0</span></p>
+    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.10.1</span></p>
   </div>
 
   <script>
