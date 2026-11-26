@@ -7,7 +7,7 @@
     // 座位：いすと座る人
     sit: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="20" cy="9" r="4" fill="currentColor" stroke="none"/>
-      <path d="M20 27h9v12" stroke="${C.mid}"/><path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="${C.mid}"/></svg>`,
+      <path d="M20 27h9v12" stroke="#d3d7de"/><path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="${C.mid}"/></svg>`,
     // 立位：立つ人といすの背
     stand: `<svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="18" cy="8" r="4" fill="currentColor" stroke="none"/>
@@ -108,7 +108,7 @@
       const B2 = exDef && exDef.perLeg ? A : B;
       const far = q => [q.hip, [q.knee[0] - 5, q.knee[1] - 2], [q.ankle[0] - 5, q.ankle[1]], [q.toe[0] - 5, q.toe[1]]].map(pt).join(' ');
       body = `
-        <polyline fill="none" stroke="rgba(255,255,255,.5)" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="${far(A)}">
+        <polyline fill="none" stroke="#d3d7de" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="${far(A)}">
           ${anim('points', far(A), far(B2))}</polyline>
         <polyline fill="none" stroke="#fff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="${arm(A)}">
           ${anim('points', arm(A), arm(B))}</polyline>
