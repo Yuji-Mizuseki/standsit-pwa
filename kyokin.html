@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>貯筋運動 - 立ち座り運動アプリ</title>
+  <link rel="manifest" href="/standsit-pwa/manifest.json" />
+  <meta name="theme-color" content="#fff8f5" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fff8f5; --bg2: #ffeee6;
+      --primary: #e8613a; --primary2: #f4956e;
+      --speed: #d97b00; --speed2: #f0a030;
+      --text: #3a2820; --text-mid: #7a5a4e; --text-dim: #b09080;
+      --white: #ffffff; --danger: #cc3333; --good: #2f9e6e;
+      --shadow: rgba(232,97,58,0.15);
+    }
+    html, body { height: 100%; background: #000; color: var(--text); font-family: 'Noto Sans JP', sans-serif; overflow: hidden; }
+    svg { display: block; }
+
+    /* ===== 種目えらび ===== */
+    #pickScreen { position: fixed; inset: 0; background: var(--bg); z-index: 100; overflow-y: auto; padding: 22px 18px 40px; }
+    #pickScreen.hidden { display: none; }
+    .pk-head { display: flex; align-items: center; gap: 10px; max-width: 420px; margin: 0 auto 14px; }
+    .pk-title { flex: 1; font-size: 22px; font-weight: 900; }
+    .pill-back {
+      display: inline-flex; align-items: center; gap: 4px; padding: 10px 16px 10px 10px;
+      background: var(--white); border: 1.5px solid rgba(58,40,32,.15); border-radius: 100px;
+      color: var(--text-mid); font-size: 15px; font-weight: 700; text-decoration: none; font-family: inherit;
+    }
+    .pill-back svg { width: 18px; height: 18px; }
+    .wrap { max-width: 420px; margin: 0 auto; }
+    .sec-label { font-size: 14px; font-weight: 700; color: var(--text-mid); margin: 18px 4px 8px; }
+    .seg { display: flex; gap: 8px; }
+    .seg button {
+      flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px;
+      padding: 12px 6px; border-radius: 18px; border: 2.5px solid rgba(232,97,58,.15);
+      background: var(--white); font-family: inherit; color: var(--text); cursor: pointer;
+      box-shadow: 0 2px 10px var(--shadow); transition: all .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .seg button svg { width: 34px; height: 34px; }
+    .seg button .t { font-size: 16px; font-weight: 900; }
+    .seg button .s { font-size: 11px; color: var(--text-mid); line-height: 1.3; text-align: center; }
+    .seg button.on { border-color: var(--primary); background: #fff5f2; box-shadow: 0 6px 20px rgba(232,97,58,.2); }
+    .seg button:active { transform: scale(.97); }
+    .ex-list { display: flex; flex-direction: column; gap: 12px; }
+    .ex-card {
+      display: flex; align-items: center; gap: 12px; padding: 12px 14px 12px 10px;
+      background: var(--white); border-radius: 22px; border: 2.5px solid transparent;
+      box-shadow: 0 3px 16px var(--shadow); cursor: pointer; transition: all .2s cubic-bezier(.34,1.56,.64,1);
+    }
+    .ex-card:active { transform: scale(.98); }
+    .ex-card.on { border-color: var(--primary); background: #fff5f2; }
+    .ex-fig { width: 84px; height: 78px; flex-shrink: 0; border-radius: 16px; background: var(--bg2); display: flex; align-items: center; justify-content: center; overflow: hidden; }
+    .ex-fig .ky-fig, .ex-fig .ky-media { width: 100%; height: 100%; object-fit: cover; }
+    .ex-name { font-size: 17px; font-weight: 900; margin-bottom: 3px; }
+    .ex-sub { font-size: 12.5px; color: var(--text-mid); line-height: 1.5; }
+    .cam-tag { display: inline-block; font-size: 11px; font-weight: 700; padding: 1px 8px; border-radius: 100px; margin-left: 4px; background: var(--bg2); color: var(--text-mid); vertical-align: 2px; }
+    .must-tag { display: inline-block; font-size: 11px; font-weight: 900; padding: 1px 8px; border-radius: 100px; margin-right: 4px; background: var(--primary); color: #fff; vertical-align: 2px; }
+    .must-note { font-size: 12.5px; color: var(--text-mid); margin: -2px 4px 10px; line-height: 1.6; }
+    .cam-tag.front { background: rgba(217,123,0,.15); color: var(--speed); }
+    .detail {
+      margin-top: 16px; padding: 16px; background: var(--white); border-radius: 22px;
+      box-shadow: 0 3px 16px var(--shadow); display: none;
+    }
+    .detail.show { display: block; }
+    .detail-fig { width: 100%; height: 180px; background: var(--bg2); border-radius: 18px; display: flex; align-items: center; justify-content: center; overflow: hidden; margin-bottom: 12px; }
+    .detail-fig .ky-fig { height: 100%; }
+    .detail-fig .ky-media { width: 100%; height: 100%; object-fit: contain; }
+    .detail h3 { font-size: 19px; font-weight: 900; margin-bottom: 6px; }
+    .detail p { font-size: 15px; line-height: 1.75; color: var(--text); }
+    .rule { margin-top: 10px; font-size: 13.5px; color: var(--text-mid); line-height: 1.7; background: var(--bg); border-radius: 14px; padding: 10px 12px; }
+    .btn-launch {
+      width: 100%; margin-top: 16px; padding: 20px; border: none; border-radius: 100px;
+      font-size: 20px; font-weight: 900; font-family: inherit; cursor: pointer; color: #fff;
+      background: linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow: 0 4px 20px var(--shadow);
+      opacity: .3; pointer-events: none; transition: all .2s;
+    }
+    .btn-launch.ready { opacity: 1; pointer-events: auto; }
+
+    /* ===== カメラ ===== */
+    #videoContainer { position: fixed; inset: 0; background: #000; }
+    #video { width: 100%; height: 100%; object-fit: cover; }
+    #canvas { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
+    .mirror #video, .mirror #canvas { transform: scaleX(-1); }
+    .overlay-gradient { position: fixed; inset: 0; pointer-events: none; z-index: 10;
+      background: linear-gradient(to bottom, rgba(0,0,0,.55) 0%, transparent 25%, transparent 50%, rgba(0,0,0,.85) 100%); }
+    .top-bar { position: fixed; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 8px; padding: 16px 14px; z-index: 20; }
+    .round-btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 4px;
+      padding: 10px 14px; background: rgba(255,255,255,.9); border: none; border-radius: 100px;
+      color: var(--text); font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer;
+      box-shadow: 0 2px 12px rgba(0,0,0,.15); text-decoration: none;
+    }
+    .round-btn svg { width: 20px; height: 20px; }
+    .page-title { flex: 1; text-align: center; font-size: 15px; font-weight: 900; color: #fff; text-shadow: 0 1px 6px rgba(0,0,0,.5); line-height: 1.3; }
+    .page-title small { display: block; font-size: 12px; font-weight: 700; opacity: .85; }
+
+    .mini-fig { position: fixed; top: 74px; left: 14px; width: 96px; height: 90px; z-index: 20; background: rgba(255,255,255,.88); border-radius: 18px; box-shadow: 0 2px 12px rgba(0,0,0,.2); overflow: hidden; }
+    .mini-fig .ky-fig, .mini-fig .ky-media { width: 100%; height: 100%; object-fit: cover; }
+
+    .center-display { position: fixed; top: 44%; left: 50%; transform: translate(-50%, -50%); z-index: 20; text-align: center; pointer-events: none; }
+    .big-number { font-size: clamp(90px, 24vw, 130px); font-weight: 900; line-height: 1; color: #fff; text-shadow: 0 4px 20px rgba(0,0,0,.5); transition: transform .1s cubic-bezier(.34,1.56,.64,1); }
+    .big-number.pulse { transform: scale(1.12); }
+    .big-label { font-size: 16px; font-weight: 700; color: rgba(255,255,255,.8); letter-spacing: .1em; margin-top: 6px; text-shadow: 0 1px 6px rgba(0,0,0,.4); }
+    .set-dots { display: flex; justify-content: center; gap: 8px; margin-top: 12px; }
+    .set-dots i { width: 14px; height: 14px; border-radius: 50%; border: 2px solid rgba(255,255,255,.8); }
+    .set-dots i.done { background: var(--primary2); border-color: var(--primary2); }
+
+    /* 動きの大きさゲージ（右端） */
+    .gauge { position: fixed; right: 14px; top: 50%; transform: translateY(-50%); width: 26px; height: 46vh; z-index: 20;
+      background: rgba(255,255,255,.25); border-radius: 100px; overflow: hidden; border: 2px solid rgba(255,255,255,.6); }
+    .gauge .fill { position: absolute; left: 0; right: 0; bottom: 0; height: 0; background: linear-gradient(to top, var(--primary), var(--primary2)); transition: height .08s linear; }
+    .gauge .fill.ok { background: linear-gradient(to top, #2f9e6e, #6fd3a6); }
+    .gauge .mark { position: absolute; left: -2px; right: -2px; height: 3px; background: #fff; }
+    .gauge-label { position: fixed; right: 6px; top: calc(50% + 23vh + 8px); width: 42px; text-align: center; z-index: 20; color: #fff; font-size: 11px; font-weight: 700; text-shadow: 0 1px 4px rgba(0,0,0,.6); }
+
+    .state-badge { position: fixed; top: 44%; left: 50%; transform: translate(-50%, 92px); z-index: 20; padding: 10px 22px; border-radius: 100px; font-size: 16px; font-weight: 700; background: rgba(255,255,255,.88); color: var(--text-mid); box-shadow: 0 2px 12px rgba(0,0,0,.2); white-space: nowrap; transition: all .25s ease; }
+    .state-badge.moving { background: rgba(232,97,58,.92); color: #fff; }
+    .state-badge.warn { background: rgba(204,51,51,.92); color: #fff; }
+
+    .rep-toast { position: fixed; top: 84px; left: 50%; transform: translateX(-50%) translateY(-12px); z-index: 30; opacity: 0;
+      background: var(--white); border-radius: 18px; padding: 10px 18px; box-shadow: 0 4px 20px rgba(0,0,0,.25);
+      font-size: 15px; font-weight: 700; color: var(--text); text-align: center; transition: all .25s ease; pointer-events: none; white-space: nowrap; }
+    .rep-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+    .rep-toast b { color: var(--primary); }
+    .rep-toast .g { color: var(--good); }
+
+    .bottom-controls { position: fixed; bottom: 0; left: 0; right: 0; padding: 16px 22px 40px; z-index: 20; }
+    .controls-panel { background: rgba(255,255,255,.92); border-radius: 24px 24px 0 0; box-shadow: 0 -4px 24px rgba(0,0,0,.1); margin: -16px -22px 0; padding: 18px 22px 0; transition: background .3s, padding .3s; }
+    .controls-panel.measuring { background: rgba(0,0,0,.08); padding: 10px 22px 0; }
+    .stats { display: flex; justify-content: space-around; margin-bottom: 12px; text-align: center; }
+    .stats .v { font-size: 24px; font-weight: 900; line-height: 1.1; }
+    .stats .k { font-size: 11.5px; color: var(--text-dim); }
+    .controls-panel.measuring .stats .v { color: #fff; }
+    .controls-panel.measuring .stats .k { color: rgba(255,255,255,.7); }
+    .btn-row { display: flex; gap: 12px; margin-bottom: 12px; }
+    .btn { flex: 1; padding: 18px; border: none; border-radius: 18px; font-size: 18px; font-weight: 900; font-family: inherit; cursor: pointer; transition: all .18s cubic-bezier(.34,1.56,.64,1); }
+    .btn:active { transform: scale(.96); }
+    .btn-go { background: linear-gradient(135deg, var(--primary), var(--primary2)); color: #fff; box-shadow: 0 4px 16px var(--shadow); }
+    .btn-stop { background: linear-gradient(135deg, var(--danger), #e05555); color: #fff; }
+    .btn-sub { flex: 0 0 auto; padding: 18px 18px; background: var(--bg2); color: var(--text-mid); font-size: 16px; }
+    .controls-panel.measuring .btn { padding: 12px; font-size: 15px; }
+
+    #countdownOverlay { position: fixed; inset: 0; background: rgba(0,0,0,.6); z-index: 60; display: none; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 0 24px; }
+    #countdownOverlay.show { display: flex; }
+    .countdown-number { font-size: 140px; font-weight: 900; color: #fff; line-height: 1; text-shadow: 0 4px 30px rgba(0,0,0,.5); animation: countPop .8s cubic-bezier(.34,1.56,.64,1); }
+    .countdown-label { font-size: 20px; font-weight: 700; color: rgba(255,255,255,.88); margin-top: 14px; line-height: 1.6; }
+    @keyframes countPop { from { transform: scale(1.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+
+    /* ===== まとめ（透明オーバーレイ・カメラが見える） ===== */
+    #summary { position: fixed; inset: 0; z-index: 50; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 30px 26px; background: rgba(0,0,0,.35); }
+    #summary.show { display: flex; }
+    .sm-icon { width: 76px; height: 76px; background: rgba(255,255,255,.92); border-radius: 24px; padding: 12px; }
+    .sm-title { font-size: 26px; font-weight: 900; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,.6); }
+    .sm-yen { font-size: 52px; font-weight: 900; color: #ffe066; line-height: 1; text-shadow: 0 2px 12px rgba(0,0,0,.5); }
+    .sm-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; max-width: 320px; margin: 6px 0; }
+    .sm-grid > div { background: rgba(255,255,255,.92); border-radius: 16px; padding: 10px; text-align: center; }
+    /* まとめ表示中は重なる部品を隠す（カメラは見えたまま） */
+    body.summary-on .center-display, body.summary-on .gauge, body.summary-on .gauge-label,
+    body.summary-on .state-badge, body.summary-on .rep-toast, body.summary-on .bottom-controls,
+    body.summary-on .mini-fig { display: none; }
+    .sm-grid .v { font-size: 22px; font-weight: 900; }
+    .sm-grid .k { font-size: 12px; color: var(--text-mid); }
+    .sm-msg { font-size: 15px; color: #fff; text-align: center; line-height: 1.6; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+    .sm-btns { display: flex; flex-direction: column; gap: 10px; width: 100%; max-width: 320px; }
+    .cbtn { width: 100%; padding: 17px; border: none; border-radius: 100px; font-size: 18px; font-weight: 900; font-family: inherit; cursor: pointer; text-align: center; text-decoration: none; display: flex; align-items: center; justify-content: center; }
+    .cbtn-save { background: linear-gradient(135deg, var(--primary), var(--primary2)); color: #fff; box-shadow: 0 4px 18px var(--shadow); }
+    .cbtn-save:disabled { opacity: .55; }
+    .cbtn-retry { background: rgba(255,255,255,.92); color: var(--text); }
+    .cbtn-home { background: transparent; color: rgba(255,255,255,.85); font-size: 15px; padding: 10px; text-shadow: 0 1px 4px rgba(0,0,0,.5); }
+  </style>
+</head>
+<body>
+
+<!-- 種目えらび -->
+<div id="pickScreen">
+  <div class="pk-head">
+    <a href="index.html" class="pill-back" id="pkBack"></a>
+    <div class="pk-title">貯筋運動</div>
+  </div>
+  <div class="wrap">
+    <div class="sec-label">むずかしさ</div>
+    <div class="seg" id="levelSeg"></div>
+
+    <div class="sec-label">プログラム</div>
+    <div class="seg" id="progSeg"></div>
+
+    <div class="sec-label">はやさ</div>
+    <div class="seg" id="paceSeg"></div>
+
+    <div class="sec-label">種目をえらぶ</div>
+    <div class="must-note"><span class="must-tag">★必須</span>福永哲夫先生の「貯筋のススメ」で紹介されている運動です。まずはここから。</div>
+    <div class="ex-list" id="exList"></div>
+
+    <div class="detail" id="detail">
+      <div class="detail-fig" id="detailFig"></div>
+      <h3 id="detailName"></h3>
+      <p id="detailHow"></p>
+      <div class="rule" id="detailRule"></div>
+      <button class="btn-launch" id="launchBtn">カメラを起動する</button>
+    </div>
+  </div>
+</div>
+
+<!-- カメラ -->
+<div id="videoContainer">
+  <video id="video" playsinline autoplay muted></video>
+  <canvas id="canvas"></canvas>
+</div>
+<div class="overlay-gradient"></div>
+
+<div class="top-bar">
+  <button class="round-btn" id="toPick"></button>
+  <div class="page-title" id="pageTitle">貯筋運動</div>
+  <button class="round-btn" id="soundBtn" aria-label="音声"></button>
+  <button class="round-btn" id="flipBtn" aria-label="カメラ切替"></button>
+</div>
+<div class="mini-fig" id="miniFig"></div>
+
+<div class="center-display">
+  <div class="big-number" id="bigNumber">0</div>
+  <div class="big-label" id="bigLabel">回</div>
+  <div class="set-dots" id="setDots"></div>
+</div>
+<div class="gauge" id="gauge"><div class="fill" id="gaugeFill"></div><div class="mark" id="markTop"></div><div class="mark" id="markGood"></div></div>
+<div class="gauge-label">動きの<br>大きさ</div>
+<div class="state-badge" id="stateBadge">待機中</div>
+<div class="rep-toast" id="repToast"></div>
+
+<div id="countdownOverlay">
+  <div class="countdown-number" id="countdownNum">3</div>
+  <div class="countdown-label" id="countdownLabel">休みの姿勢で止まってください</div>
+</div>
+
+<div id="summary">
+  <div class="sm-icon" id="smIcon"></div>
+  <div class="sm-title" id="smTitle">おつかれさまでした</div>
+  <div class="sm-yen" id="smYen">ハンコ 0こ</div>
+  <div class="sm-grid">
+    <div><div class="v" id="smReps">0</div><div class="k">回数</div></div>
+    <div><div class="v" id="smSets">0</div><div class="k">セット</div></div>
+    <div><div class="v" id="smSec">-</div><div class="k">1回の平均秒数</div></div>
+    <div><div class="v" id="smForm">-</div><div class="k">動きの大きさ（平均）</div></div>
+  </div>
+  <div class="sm-msg" id="smMsg"></div>
+  <div class="sm-btns">
+    <button class="cbtn cbtn-save" id="smSave">貯筋通帳にハンコを押す</button>
+    <button class="cbtn cbtn-retry" id="smMore">つづけてやる</button>
+    <button class="cbtn cbtn-retry" id="smPick">ほかの種目をえらぶ</button>
+    <a href="tsucho.html" class="cbtn cbtn-home">貯筋通帳を見る</a>
+  </div>
+</div>
+
+<div class="bottom-controls">
+  <div class="controls-panel" id="panel">
+    <div class="stats">
+      <div><div class="v" id="stSet">0</div><div class="k">セット</div></div>
+      <div><div class="v" id="stSec">-</div><div class="k">前の1回（秒）</div></div>
+      <div><div class="v" id="stForm">-</div><div class="k">大きさ（点）</div></div>
+      <div><div class="v" id="stYen">0</div><div class="k">ハンコ</div></div>
+    </div>
+    <div class="btn-row">
+      <button class="btn btn-go" id="startBtn">計測スタート</button>
+      <button class="btn btn-sub" id="finishBtn">終わる</button>
+    </div>
+  </div>
+</div>
+
+<script src="/standsit-pwa/mediapipe/camera_utils/camera_utils.js"></script>
+<script src="/standsit-pwa/mediapipe/drawing_utils/drawing_utils.js"></script>
+<script src="/standsit-pwa/mediapipe/pose/pose.js"></script>
+<script src="/standsit-pwa/js/kyokin-exercises.js"></script>
+<script src="/standsit-pwa/js/kyokin-ui.js"></script>
+<script src="/standsit-pwa/js/tsucho-db.js"></script>
+<script>
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('/standsit-pwa/sw.js').then(reg => {
+      const appSettings = JSON.parse(localStorage.getItem('standsit-settings') || '{}');
+      if ((appSettings.netMode || 'online') === 'online') {
+        reg.addEventListener('updatefound', () => {
+          const w = reg.installing;
+          w.addEventListener('statechange', () => { if (w.state === 'activated') window.location.reload(); });
+        });
+      }
+    });
+  }
+
+  const K = window.KYOKIN, UI = window.KYOKIN_UI, ICONS = UI.ICONS;
+  const $ = id => document.getElementById(id);
+
+  // ===== 選択の記憶（端末の中だけ） =====
+  const PREF_KEY = 'kyokin-pref';
+  let pref = { level: 'normal', program: 'sit', pace: 'slow', ex: null, sound: true };
+  try { Object.assign(pref, JSON.parse(localStorage.getItem(PREF_KEY) || '{}')); } catch (e) {}
+  function savePref() { try { localStorage.setItem(PREF_KEY, JSON.stringify(pref)); } catch (e) {} }
+
+  $('pkBack').innerHTML = ICONS.back + 'もどる';
+  $('toPick').innerHTML = ICONS.back;
+  $('flipBtn').innerHTML = ICONS.flip;
+
+  function renderSeg(el, items, cur, onPick) {
+    el.innerHTML = '';
+    items.forEach(it => {
+      const b = document.createElement('button');
+      b.className = it.key === cur ? 'on' : '';
+      b.innerHTML = (it.icon || '') + `<span class="t">${it.label}</span>` + (it.sub ? `<span class="s">${it.sub}</span>` : '');
+      b.onclick = () => onPick(it.key);
+      el.appendChild(b);
+    });
+  }
+
+  function renderPick() {
+    renderSeg($('levelSeg'), Object.entries(K.LEVELS).map(([k, v], i) => ({ key: k, label: v.label, sub: v.sub, icon: ICONS.level(i + 1) })),
+      pref.level, k => { pref.level = k; savePref(); renderPick(); });
+    renderSeg($('progSeg'), [
+      { key: 'sit', label: '座ってやる', sub: '手の支えがないと<br>立つのが不安な方', icon: ICONS.sit },
+      { key: 'stand', label: '立ってやる', sub: '手の支えなしで<br>いすから立てる方', icon: ICONS.stand },
+    ], pref.program, k => { pref.program = k; pref.ex = null; savePref(); renderPick(); });
+    renderSeg($('paceSeg'), [
+      { key: 'slow', label: 'ゆっくり', sub: '1セット8回<br>1回を時間をかけて', icon: ICONS.slow },
+      { key: 'normal', label: 'ふつう', sub: '1セット16回<br>リズムよく', icon: ICONS.rhythm },
+    ], pref.pace, k => { pref.pace = k; savePref(); renderPick(); });
+
+    const list = $('exList');
+    list.innerHTML = '';
+    K.EXERCISES.filter(e => e.program === pref.program).sort((a, b) => (b.must ? 1 : 0) - (a.must ? 1 : 0)).forEach(e => {
+      const c = document.createElement('div');
+      c.className = 'ex-card' + (pref.ex === e.id ? ' on' : '');
+      c.innerHTML = `<div class="ex-fig">${UI.figure(e.id)}</div>
+        <div><div class="ex-name">${e.must ? '<span class="must-tag">★必須</span>' : ''}${e.name}<span class="cam-tag ${e.camera === '正面' ? 'front' : ''}">カメラ${e.camera}</span></div>
+        <div class="ex-sub">${e.muscle}</div></div>`;
+      c.onclick = () => { pref.ex = e.id; savePref(); renderPick(); setTimeout(() => $('detail').scrollIntoView({ behavior: 'smooth', block: 'start' }), 50); };
+      list.appendChild(c);
+    });
+
+    const ex = K.EXERCISES.find(e => e.id === pref.ex && e.program === pref.program);
+    $('detail').classList.toggle('show', !!ex);
+    $('launchBtn').classList.toggle('ready', !!ex);
+    if (ex) {
+      const lv = K.LEVELS[pref.level], pc = K.PACE[pref.pace];
+      const perSet = pc.repsPerSet * (ex.perLeg ? 2 : 1);
+      $('detailFig').innerHTML = UI.figure(ex.id, { dur: pref.pace === 'slow' ? lv.slowSec * 2 : 3 });
+      $('detailName').innerHTML = (ex.must ? '<span class="must-tag">★必須</span>' : '') + ex.name;
+      $('detailHow').textContent = ex.how + (ex.must ? `（貯筋のススメ 図５の「${ex.must}」）` : '');
+      $('detailRule').innerHTML =
+        `1セット ${perSet}回${ex.perLeg ? '（左右あわせて）' : ''} × ${lv.sets}セットが目標です。` +
+        (pref.pace === 'slow' ? `<br>1回を <b>${lv.slowSec}秒以上</b> かけてゆっくり。` : '') +
+        `<br>息を止めずに、数を声に出しながら。<br>カメラは体の<b>${ex.camera}</b>から、全身が映るように置いてください。` +
+        `<br>1セットできるごとに、貯筋通帳にハンコを1つ押します。`;
+    }
+  }
+  renderPick();
+
+  // ===== 計測 =====
+  const video = $('video'), canvas = $('canvas'), ctx = canvas.getContext('2d');
+  let EX = null, LV = null, PC = null, perSet = 16;
+  let mpCamera = null, facingMode = 'user';
+  let isMeasuring = false, calibrating = false, calibVals = [];
+  let base = null, smooth = [], state = 'rest', repStart = 0, peak = 0, reached = false;
+  let reps = 0, durs = [], forms = [], slowOk = 0, saved = false, lastSeen = 0;
+
+  $('launchBtn').onclick = () => {
+    EX = K.EXERCISES.find(e => e.id === pref.ex); if (!EX) return;
+    LV = K.LEVELS[pref.level]; PC = K.PACE[pref.pace];
+    perSet = PC.repsPerSet * (EX.perLeg ? 2 : 1);
+    $('pickScreen').classList.add('hidden');
+    $('pageTitle').innerHTML = `${EX.name}<small>${LV.label}・${PC.label}</small>`;
+    $('miniFig').innerHTML = UI.figure(EX.id, { dur: pref.pace === 'slow' ? LV.slowSec * 2 : 3 });
+    // ゲージの目盛り：上＝「しっかり」、下の線＝「1回と数える」
+    const g = EX.good * LV.range * 1.15;
+    $('markGood').style.bottom = (EX.good * LV.range / g * 100) + '%';
+    $('markTop').style.bottom = (EX.top * LV.range / g * 100) + '%';
+    resetCounts();
+    if (!mpCamera) initPose();
+  };
+
+  $('toPick').onclick = () => {
+    stopMeasuring();
+    $('summary').classList.remove('show'); document.body.classList.remove('summary-on');
+    $('pickScreen').classList.remove('hidden');
+    renderPick();
+  };
+
+  function soundIcon() { $('soundBtn').innerHTML = pref.sound ? ICONS.sound : ICONS.mute; }
+  soundIcon();
+  $('soundBtn').onclick = () => { pref.sound = !pref.sound; savePref(); soundIcon(); };
+
+  function initPose() {
+    const pose = new Pose({ locateFile: f => '/standsit-pwa/mediapipe/pose/' + f });
+    pose.setOptions({ modelComplexity: 1, smoothLandmarks: true, minDetectionConfidence: .5, minTrackingConfidence: .5 });
+    pose.onResults(onResults);
+    mpCamera = new Camera(video, { onFrame: async () => { await pose.send({ image: video }); }, width: 640, height: 480, facingMode });
+    mpCamera.start();
+  }
+  $('flipBtn').onclick = () => {
+    facingMode = facingMode === 'user' ? 'environment' : 'user';
+    if (mpCamera) { mpCamera.stop(); mpCamera = null; }
+    initPose();
+  };
+
+  // 声で数える（日本語の音声があるときだけ）
+  function say(text) {
+    if (!pref.sound || !('speechSynthesis' in window)) return;
+    try { const u = new SpeechSynthesisUtterance(text); u.lang = 'ja-JP'; u.rate = 1.05; speechSynthesis.cancel(); speechSynthesis.speak(u); } catch (e) {}
+  }
+
+  function onResults(results) {
+    canvas.width = video.videoWidth || 640;
+    canvas.height = video.videoHeight || 480;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    const lm = results.poseLandmarks;
+    if (!lm) { if (isMeasuring) badge('体が映っていません', 'warn'); return; }
+    drawConnectors(ctx, lm, POSE_CONNECTIONS, { color: 'rgba(244,149,110,.55)', lineWidth: 3 });
+    drawLandmarks(ctx, lm, { color: 'rgba(244,149,110,.9)', radius: 3, lineWidth: 1 });
+    if (!EX) return;
+    // 見ている関節を大きく光らせる（モーションキャプチャの「どこを見ているか」）
+    EX.joints.forEach(i => {
+      const p = lm[i]; if ((p.visibility ?? 1) < .35) return;
+      ctx.beginPath(); ctx.arc(p.x * canvas.width, p.y * canvas.height, 9, 0, Math.PI * 2);
+      ctx.fillStyle = 'rgba(232,97,58,.9)'; ctx.fill();
+      ctx.lineWidth = 3; ctx.strokeStyle = '#fff'; ctx.stroke();
+    });
+
+    const m = EX.measure(lm);
+    if (!m) { if (isMeasuring) badge(`${EX.camera}から全身が映るようにしてください`, 'warn'); return; }
+    lastSeen = Date.now();
+    smooth.push(m.v); if (smooth.length > 5) smooth.shift();
+    const v = smooth.reduce((a, b) => a + b, 0) / smooth.length;
+
+    if (calibrating) { calibVals.push(v); return; }
+    if (!isMeasuring || base === null) return;
+
+    const start = EX.start * Math.max(LV.range, .8), top = EX.top * LV.range, good = EX.good * LV.range;
+    const delta = (v - base) * EX.dir;
+    const g = good * 1.15;
+    const fill = $('gaugeFill');
+    fill.style.height = Math.max(0, Math.min(100, delta / g * 100)) + '%';
+    fill.classList.toggle('ok', delta >= top);
+
+    const now = Date.now();
+    if (state === 'rest') {
+      if (delta > start) { state = 'moving'; repStart = now; peak = delta; reached = false; badge('うごいています', 'moving'); }
+      else {
+        // 休み中は基準を少しずつ合わせ直す（座り直し・カメラのずれに追従）
+        if (Math.abs(delta) < start * .5) base += (v - base) * .02;
+        badge('休み', '');
+      }
+    } else {
+      peak = Math.max(peak, delta);
+      if (delta >= top && !reached) { reached = true; badge('そこでもどします', 'moving'); }
+      if (delta < start * .8) {
+        state = 'rest';
+        const sec = (now - repStart) / 1000;
+        if (reached) countRep(sec, peak, good);
+        else { toast('<b>もう少し大きく</b> 動かしましょう'); badge('休み', ''); }
+      }
+    }
+  }
+
+  function countRep(sec, pk, good) {
+    reps++;
+    const form = Math.min(100, Math.round(pk / good * 100));
+    durs.push(sec); forms.push(form);
+    const slowTarget = pref.pace === 'slow' ? LV.slowSec : null;
+    const isSlow = slowTarget ? sec >= slowTarget : true;
+    if (slowTarget && isSlow) slowOk++;
+    const n = $('bigNumber');
+    n.textContent = reps % perSet === 0 ? perSet : reps % perSet;
+    n.classList.add('pulse'); setTimeout(() => n.classList.remove('pulse'), 150);
+    $('stSec').textContent = sec.toFixed(1);
+    $('stForm').textContent = form;
+    const sets = Math.floor(reps / perSet);
+    $('stSet').textContent = sets;
+    $('stYen').textContent = sets * K.STAMP_PER_SET;
+    drawDots();
+    let msg = `${sec.toFixed(1)}秒・大きさ ${form}点`;
+    if (slowTarget) msg = (isSlow ? '<span class="g">ゆっくりできました</span>　' : `<b>はやいです</b>（${slowTarget}秒以上で）　`) + msg;
+    toast(msg);
+    if (reps % perSet === 0) {
+      say(`${sets}セット、できました`);
+      if (sets >= LV.sets) { setTimeout(() => finish(true), 900); return; }
+    } else say(String(reps % perSet));
+  }
+
+  function drawDots() {
+    const sets = Math.floor(reps / perSet);
+    $('setDots').innerHTML = Array.from({ length: Math.max(LV.sets, sets + (reps % perSet ? 1 : 0)) },
+      (_, i) => `<i class="${i < sets ? 'done' : ''}"></i>`).join('');
+  }
+
+  let toastTimer = null;
+  function toast(html) {
+    const t = $('repToast'); t.innerHTML = html; t.classList.add('show');
+    clearTimeout(toastTimer); toastTimer = setTimeout(() => t.classList.remove('show'), 1800);
+  }
+  function badge(text, cls) { const b = $('stateBadge'); b.textContent = text; b.className = 'state-badge ' + (cls || ''); }
+
+  function resetCounts() {
+    reps = 0; durs = []; forms = []; slowOk = 0; saved = false; state = 'rest'; base = null;
+    $('bigNumber').textContent = '0'; $('bigLabel').textContent = `回 ／ ${perSet}回で1セット`;
+    $('stSet').textContent = '0'; $('stSec').textContent = '-'; $('stForm').textContent = '-'; $('stYen').textContent = '0';
+    $('gaugeFill').style.height = '0';
+    drawDots(); badge('待機中', '');
+    $('startBtn').textContent = '計測スタート'; $('startBtn').className = 'btn btn-go';
+    $('panel').classList.remove('measuring');
+  }
+
+  // カウントダウンの最後の1秒で、休みの姿勢の角度を測る＝基準づくり
+  function startCountdown(cb) {
+    let c = 3; const o = $('countdownOverlay'), num = $('countdownNum');
+    $('countdownLabel').innerHTML = `${EX.program === 'sit' || EX.id === 'std-chair' ? 'いすに座った' : EX.id === 'std-situp' ? 'あおむけの' : '立った'}休みの姿勢で<br>止まってください`;
+    num.textContent = c; o.classList.add('show');
+    const iv = setInterval(() => {
+      c--;
+      if (c === 1) { calibVals = []; calibrating = true; }
+      if (c <= 0) { clearInterval(iv); calibrating = false; o.classList.remove('show'); cb(); }
+      else { num.textContent = c; num.style.animation = 'none'; num.offsetHeight; num.style.animation = ''; }
+    }, 1000);
+  }
+
+  function beginMeasuring() {
+    if (!calibVals.length) { badge(`${EX.camera}から全身が映るようにしてください`, 'warn'); return; }
+    const s = calibVals.slice().sort((a, b) => a - b);
+    if (base === null) base = s[Math.floor(s.length / 2)];
+    isMeasuring = true; state = 'rest';
+    $('startBtn').textContent = '一時停止'; $('startBtn').className = 'btn btn-stop';
+    $('panel').classList.add('measuring');
+    say('はじめます');
+  }
+  function stopMeasuring() {
+    isMeasuring = false;
+    $('startBtn').textContent = '再開する'; $('startBtn').className = 'btn btn-go';
+    $('panel').classList.remove('measuring');
+  }
+
+  $('startBtn').onclick = () => {
+    if (isMeasuring) { stopMeasuring(); return; }
+    $('startBtn').disabled = true;
+    startCountdown(() => { $('startBtn').disabled = false; beginMeasuring(); });
+  };
+  $('finishBtn').onclick = () => finish(false);
+
+  function finish(reachedGoal) {
+    stopMeasuring();
+    const sets = Math.floor(reps / perSet);
+    const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+    $('smIcon').innerHTML = ICONS.stamp;
+    $('smTitle').textContent = reachedGoal ? '目標たっせい！' : 'おつかれさまでした';
+    $('smYen').textContent = 'ハンコ ' + (sets * K.STAMP_PER_SET) + 'こ';
+    $('smReps').textContent = reps;
+    $('smSets').textContent = sets;
+    $('smSec').textContent = durs.length ? avg(durs).toFixed(1) + '秒' : '-';
+    $('smForm').textContent = forms.length ? Math.round(avg(forms)) + '点' : '-';
+    let msg = '';
+    if (pref.pace === 'slow' && reps) msg = `ゆっくりできた回：${slowOk} / ${reps}回`;
+    if (!sets) msg += (msg ? '<br>' : '') + `あと ${perSet - (reps % perSet)}回で1セット（ハンコ1つ）です`;
+    $('smMsg').innerHTML = msg;
+    const sv = $('smSave'); sv.disabled = !sets || saved; sv.textContent = saved ? 'ハンコを押しました' : '貯筋通帳にハンコを押す';
+    $('summary').classList.add('show'); document.body.classList.add('summary-on');
+    if (reachedGoal) say('目標たっせいです');
+  }
+
+  $('smSave').onclick = async () => {
+    const sets = Math.floor(reps / perSet);
+    if (!sets || saved) return;
+    const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
+    await TSUCHO.add({
+      exId: EX.id, name: EX.name, program: EX.program, level: pref.level, pace: pref.pace,
+      sets, reps, slowOk, avgSec: +avg(durs).toFixed(1), form: Math.round(avg(forms)),
+      stamps: sets * K.STAMP_PER_SET,
+    });
+    saved = true;
+    $('smSave').disabled = true; $('smSave').textContent = 'ハンコを押しました';
+  };
+  $('smMore').onclick = () => { $('summary').classList.remove('show'); document.body.classList.remove('summary-on'); if (saved) resetCounts(); };
+  $('smPick').onclick = () => { $('toPick').onclick(); };
+</script>
+</body>
+</html>

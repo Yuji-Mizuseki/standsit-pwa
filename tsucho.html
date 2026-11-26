@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>貯筋通帳 - 立ち座り運動アプリ</title>
+  <link rel="manifest" href="/standsit-pwa/manifest.json" />
+  <meta name="theme-color" content="#fff8f5" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #fff8f5; --bg2: #ffeee6; --primary: #e8613a; --primary2: #f4956e;
+      --text: #3a2820; --text-mid: #7a5a4e; --text-dim: #b09080; --white: #fff;
+      --good: #2f9e6e; --danger: #cc3333; --shadow: rgba(232,97,58,0.15);
+    }
+    html, body { background: var(--bg); color: var(--text); font-family: 'Noto Sans JP', sans-serif; min-height: 100%; }
+    svg { display: block; }
+    .container { max-width: 420px; margin: 0 auto; padding: 22px 18px 60px; }
+    .head { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; }
+    .head h1 { flex: 1; font-size: 22px; font-weight: 900; }
+    .pill-back { display: inline-flex; align-items: center; gap: 4px; padding: 10px 16px 10px 10px; background: var(--white);
+      border: 1.5px solid rgba(58,40,32,.15); border-radius: 100px; color: var(--text-mid); font-size: 15px; font-weight: 700; text-decoration: none; }
+    .pill-back svg { width: 18px; height: 18px; }
+    .card { background: var(--white); border-radius: 24px; box-shadow: 0 4px 20px var(--shadow); padding: 20px; margin-bottom: 16px; }
+    .bal-top { display: flex; align-items: center; gap: 14px; }
+    .bal-icon { width: 58px; height: 58px; background: var(--bg2); border-radius: 18px; padding: 8px; flex-shrink: 0; }
+    .bal-k { font-size: 13px; color: var(--text-mid); font-weight: 700; }
+    .bal-v { font-size: 38px; font-weight: 900; line-height: 1.1; }
+    .bal-v small { font-size: 18px; margin-left: 2px; }
+    .month-row { display: flex; justify-content: space-between; font-size: 14px; font-weight: 700; color: var(--text-mid); margin: 16px 0 8px; }
+    .stamps { display: grid; grid-template-columns: repeat(10, 1fr); gap: 2px; }
+    .stamps span { aspect-ratio: 1; }
+    .stamps svg { width: 100%; height: 100%; }
+    .note { font-size: 12.5px; color: var(--text-dim); line-height: 1.7; margin-top: 12px; }
+    /* コラーゲン */
+    .col-btn { width: 100%; margin-top: 14px; padding: 16px; border-radius: 100px; border: 2.5px solid var(--primary); background: var(--white);
+      color: var(--primary); font-size: 18px; font-weight: 900; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: all .2s cubic-bezier(.34,1.56,.64,1); }
+    .col-btn:active { transform: scale(.97); }
+    .col-btn.done { background: linear-gradient(135deg, var(--primary), var(--primary2)); color: #fff; border-color: transparent; }
+    .col-btn svg { width: 26px; height: 26px; }
+    .col-stats { display: flex; justify-content: space-around; text-align: center; margin-top: 14px; }
+    .col-stats .v { font-size: 26px; font-weight: 900; }
+    .col-stats .k { font-size: 12px; color: var(--text-dim); }
+    .undo { display: block; margin: 8px auto 0; border: none; background: none; color: var(--text-dim); font-size: 12.5px; font-family: inherit; text-decoration: underline; cursor: pointer; }
+    .photo-btn { width: 100%; margin-top: 10px; padding: 14px; border-radius: 100px; border: 2px solid rgba(58,40,32,.15); background: var(--bg);
+      color: var(--text); font-size: 16px; font-weight: 900; font-family: inherit; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .photo-btn svg { width: 24px; height: 24px; color: var(--primary); }
+    .thumbs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-top: 12px; }
+    .thumbs button { position: relative; aspect-ratio: 1; border: none; padding: 0; border-radius: 14px; overflow: hidden; background: var(--bg2); cursor: pointer; }
+    .thumbs img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .thumbs .d { position: absolute; left: 6px; bottom: 6px; background: rgba(255,255,255,.9); color: var(--text); font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 100px; }
+    .cal > div.ph { background-size: cover; background-position: center; color: #fff; font-weight: 700; text-shadow: 0 1px 3px rgba(0,0,0,.7); }
+    #viewer { position: fixed; inset: 0; background: rgba(0,0,0,.88); z-index: 100; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 24px; }
+    #viewer.show { display: flex; }
+    #viewer img { max-width: 100%; max-height: 70vh; border-radius: 16px; }
+    #viewer .vd { color: #fff; font-size: 16px; font-weight: 700; }
+    #viewer .vb { display: flex; gap: 10px; }
+    #viewer button { padding: 12px 22px; border-radius: 100px; border: none; font-size: 15px; font-weight: 700; font-family: inherit; cursor: pointer; }
+    .v-close { background: #fff; color: var(--text); }
+    .v-del { background: transparent; color: #fff; border: 1.5px solid rgba(255,255,255,.6) !important; }
+    .sec { font-size: 15px; font-weight: 900; margin: 22px 4px 10px; }
+    .cal { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
+    .cal > div { position: relative; aspect-ratio: 1; border-radius: 9px; background: var(--bg2); display: flex; align-items: center; justify-content: center; font-size: 11px; color: var(--text-dim); }
+    .cal > div.l1 { background: #fbc9b4; color: var(--text); }
+    .cal > div.l2 { background: var(--primary2); color: #fff; }
+    .cal > div.l3 { background: var(--primary); color: #fff; font-weight: 700; }
+    .cal > div.today { outline: 2px solid var(--text); }
+    .cal .c { position: absolute; right: 2px; bottom: 2px; width: 12px; height: 12px; }
+    .cal-w { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; font-size: 11px; color: var(--text-dim); text-align: center; margin-bottom: 4px; }
+    .legend { display: flex; gap: 14px; align-items: center; font-size: 12px; color: var(--text-mid); margin-top: 10px; }
+    .legend i { display: inline-block; width: 12px; height: 12px; border-radius: 3px; background: var(--primary2); vertical-align: -1px; margin-right: 4px; }
+    .legend svg { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; margin-right: 2px; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    th { font-size: 12px; color: var(--text-dim); font-weight: 700; text-align: left; padding: 6px 4px; border-bottom: 2px solid var(--bg2); }
+    td { padding: 10px 4px; border-bottom: 1px solid var(--bg2); vertical-align: top; }
+    td.num { text-align: right; font-weight: 900; white-space: nowrap; }
+    td.in { color: var(--good); }
+    td.out { color: var(--danger); }
+    td .sub { display: block; font-size: 11.5px; color: var(--text-dim); font-weight: 400; }
+    .empty { text-align: center; color: var(--text-mid); padding: 26px 0; line-height: 1.8; }
+    .btn-go { display: block; text-align: center; margin-top: 8px; padding: 18px; border-radius: 100px; color: #fff; font-weight: 900; font-size: 18px;
+      text-decoration: none; background: linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow: 0 4px 18px var(--shadow); }
+    .del { border: none; background: none; color: var(--text-dim); font-size: 12px; font-family: inherit; text-decoration: underline; cursor: pointer; }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="head">
+    <a href="index.html" class="pill-back" id="back"></a>
+    <h1>貯筋通帳</h1>
+  </div>
+
+  <!-- 運動のハンコ -->
+  <div class="card">
+    <div class="bal-top">
+      <div class="bal-icon" id="balIcon"></div>
+      <div><div class="bal-k">たまった運動のハンコ</div><div class="bal-v" id="balance">0<small>こ</small></div></div>
+    </div>
+    <div class="month-row"><span id="monthLabel">今月</span><span id="monthVal">0 / 100こ</span></div>
+    <div class="stamps" id="stamps"></div>
+    <div class="note">1種目1セットできるごとにハンコ1つ。片足ずつの種目は両足で1セット。<br>1種目もやらない日が3日続くと、ハンコが5つ消えます。<br>時々どさっとやるより、毎日少しずつ。</div>
+  </div>
+
+  <!-- コラーゲンのハンコ -->
+  <div class="card">
+    <div class="bal-top">
+      <div class="bal-icon" id="colIcon"></div>
+      <div><div class="bal-k">コラーゲンのハンコ</div><div style="font-size:14px;color:var(--text-mid);line-height:1.6">飲んだ日に1つ押しましょう</div></div>
+    </div>
+    <button class="col-btn" id="colBtn"></button>
+    <button class="photo-btn" id="photoBtn"></button>
+    <input type="file" id="photoIn" accept="image/*" hidden>
+    <div class="thumbs" id="todayThumbs"></div>
+    <button class="undo" id="colUndo" style="display:none">今日のハンコを取り消す</button>
+    <div class="col-stats">
+      <div><div class="v" id="colMonth">0</div><div class="k">今月の日数</div></div>
+      <div><div class="v" id="colStreak">0</div><div class="k">続いている日数</div></div>
+    </div>
+  </div>
+
+  <div class="sec" id="calTitle">今月の記録</div>
+  <div class="card">
+    <div class="cal-w"><span>日</span><span>月</span><span>火</span><span>水</span><span>木</span><span>金</span><span>土</span></div>
+    <div class="cal" id="cal"></div>
+    <div class="legend"><span><i></i>運動（濃いほど多い）</span><span id="legendCol"></span></div>
+  </div>
+
+  <div class="sec" id="albumTitle">今月のコラーゲン料理</div>
+  <div class="card"><div class="thumbs" id="album"></div><div class="empty" id="albumEmpty">まだ写真がありません。<br>コラーゲンを入れた料理を撮ってみましょう。</div></div>
+
+  <div class="sec">運動の明細</div>
+  <div class="card" id="ledgerCard"></div>
+
+  <a href="kyokin.html" class="btn-go">貯筋運動をする</a>
+</div>
+
+<div id="viewer"><div class="vd" id="vDate"></div><img id="vImg" alt=""><div class="vb"><button class="v-close" id="vClose">とじる</button><button class="v-del" id="vDel">この写真を消す</button></div></div>
+
+<script src="/standsit-pwa/js/kyokin-exercises.js"></script>
+<script src="/standsit-pwa/js/kyokin-ui.js"></script>
+<script src="/standsit-pwa/js/tsucho-db.js"></script>
+<script>
+  if ('serviceWorker' in navigator) navigator.serviceWorker.register('/standsit-pwa/sw.js');
+  const K = window.KYOKIN, ICONS = window.KYOKIN_UI.ICONS;
+  const $ = id => document.getElementById(id);
+  $('back').innerHTML = ICONS.back + 'もどる';
+  $('balIcon').innerHTML = ICONS.stamp;
+  $('colIcon').innerHTML = ICONS.collagen;
+  $('legendCol').innerHTML = ICONS.collagen + 'コラーゲン';
+  $('photoBtn').innerHTML = ICONS.dish + 'コラーゲン料理の写真を残す';
+  const urls = [];   // 表示用の一時URL（描き直すたびに捨てる）
+  const urlOf = blob => { const u = URL.createObjectURL(blob); urls.push(u); return u; };
+  const LV = { easy: 'やさしい', normal: 'ふつう', hard: 'しっかり' };
+  const PC = { slow: 'ゆっくり', normal: 'ふつう' };
+
+  async function render() {
+    urls.splice(0).forEach(u => URL.revokeObjectURL(u));
+    const all = await TSUCHO.all();
+    const ex = all.filter(e => e.kind !== 'collagen');
+    const col = all.filter(e => e.kind === 'collagen');
+    const today = new Date();
+    const todayKey = TSUCHO.localDate(today);
+    const ym = todayKey.slice(0, 7);
+
+    // 運動のハンコ
+    const { rows, balance } = TSUCHO.ledger(ex, K, today);
+    $('balance').innerHTML = balance + '<small>こ</small>';
+    const monthIn = ex.filter(e => e.date.startsWith(ym)).reduce((s, e) => s + e.stamps, 0);
+    $('monthLabel').textContent = `${today.getMonth() + 1}月に押したハンコ`;
+    $('monthVal').textContent = `${monthIn} / ${K.MONTH_GOAL_STAMPS}こ`;
+    const cells = Math.max(K.MONTH_GOAL_STAMPS, Math.ceil(monthIn / 10) * 10);
+    $('stamps').innerHTML = Array.from({ length: cells }, (_, i) => `<span>${ICONS.seal(i < monthIn)}</span>`).join('');
+
+    // コラーゲンのハンコ（1日1つ）
+    const colDays = new Set(col.map(e => e.date));
+    const doneToday = colDays.has(todayKey);
+    $('colBtn').className = 'col-btn' + (doneToday ? ' done' : '');
+    $('colBtn').innerHTML = doneToday ? '今日はハンコを押しました' : ICONS.stamp + '今日のコラーゲンを飲んだ';
+    $('colUndo').style.display = doneToday ? 'block' : 'none';
+    $('colMonth').textContent = [...colDays].filter(d => d.startsWith(ym)).length;
+    let streak = 0;
+    for (let d = new Date(today); ; d.setDate(d.getDate() - 1)) {
+      const k = TSUCHO.localDate(d);
+      if (colDays.has(k)) streak++;
+      else if (k === todayKey) continue;   // 今日まだでも昨日までの連続は数える
+      else break;
+    }
+    $('colStreak').textContent = streak;
+
+    // 料理の写真：今日の分と、今月のアルバム
+    const photoList = col.filter(e => e.photos && e.photos.length)
+      .flatMap(e => e.photos.map((b, i) => ({ e, i, b }))).reverse();
+    const thumb = p => `<button data-id="${p.e.id}" data-i="${p.i}"><img src="${urlOf(p.b)}" alt=""><span class="d">${p.e.date.slice(5).replace('-', '/')}</span></button>`;
+    $('todayThumbs').innerHTML = photoList.filter(p => p.e.date === todayKey).map(thumb).join('');
+    const monthPhotos = photoList.filter(p => p.e.date.startsWith(ym));
+    $('albumTitle').textContent = `${today.getMonth() + 1}月のコラーゲン料理（${monthPhotos.length}枚）`;
+    $('album').innerHTML = monthPhotos.map(thumb).join('');
+    $('albumEmpty').style.display = monthPhotos.length ? 'none' : 'block';
+    document.querySelectorAll('.thumbs button').forEach(b => b.onclick = () => openViewer(+b.dataset.id, +b.dataset.i, all));
+    const firstPhoto = {};
+    col.forEach(e => { if (e.photos && e.photos.length && !firstPhoto[e.date]) firstPhoto[e.date] = e.photos[0]; });
+
+    // カレンダー
+    $('calTitle').textContent = `${today.getMonth() + 1}月の記録`;
+    const first = new Date(today.getFullYear(), today.getMonth(), 1);
+    const days = new Date(today.getFullYear(), today.getMonth() + 1, 0).getDate();
+    const perDay = {};
+    ex.forEach(e => { perDay[e.date] = (perDay[e.date] || 0) + e.stamps; });
+    let html = '';
+    for (let i = 0; i < first.getDay(); i++) html += '<span></span>';
+    for (let d = 1; d <= days; d++) {
+      const key = ym + '-' + String(d).padStart(2, '0');
+      const v = perDay[key] || 0;
+      const lv = v >= 6 ? 3 : v >= 3 ? 2 : v > 0 ? 1 : 0;
+      const ph = firstPhoto[key] ? ` style="background-image:linear-gradient(rgba(0,0,0,.15),rgba(0,0,0,.15)),url('${urlOf(firstPhoto[key])}')"` : '';
+      html += `<div class="${lv ? 'l' + lv : ''} ${ph ? 'ph' : ''} ${d === today.getDate() ? 'today' : ''}"${ph}>${d}${colDays.has(key) ? '<span class="c">' + ICONS.collagen + '</span>' : ''}</div>`;
+    }
+    $('cal').innerHTML = html;
+
+    // 運動の明細（新しい順）
+    if (!rows.length) {
+      $('ledgerCard').innerHTML = '<div class="empty">まだハンコがありません。<br>貯筋運動をして、ハンコを押しましょう。</div>';
+      return;
+    }
+    const tr = rows.slice().reverse().slice(0, 200).map(r => {
+      const md = r.date.slice(5).replace('-', '/');
+      if (r.type === 'out') return `<tr><td>${md}</td><td>お休みが3日つづきました</td><td class="num out">${r.n}</td><td class="num">${r.balance}</td></tr>`;
+      const e = r.entry;
+      return `<tr><td>${md}</td><td>${e.name}<span class="sub">${e.sets}セット・${e.reps}回・${LV[e.level] || ''}/${PC[e.pace] || ''}${e.form ? '・大きさ' + e.form + '点' : ''}
+        <button class="del" data-id="${e.id}">取り消す</button></span></td>
+        <td class="num in">+${r.n}</td><td class="num">${r.balance}</td></tr>`;
+    }).join('');
+    $('ledgerCard').innerHTML = `<table><tr><th>日付</th><th>内容</th><th style="text-align:right">増減</th><th style="text-align:right">のこり</th></tr>${tr}</table>`;
+    document.querySelectorAll('.del').forEach(b => b.onclick = async () => {
+      if (!confirm('このハンコを取り消しますか？')) return;
+      await TSUCHO.remove(+b.dataset.id); render();
+    });
+  }
+
+  $('colBtn').onclick = async () => {
+    const all = await TSUCHO.all();
+    const todayKey = TSUCHO.localDate(new Date());
+    if (all.some(e => e.kind === 'collagen' && e.date === todayKey)) return;
+    await TSUCHO.add({ kind: 'collagen', name: 'コラーゲン', stamps: 0 });
+    render();
+  };
+  $('photoBtn').onclick = () => $('photoIn').click();
+  $('photoIn').onchange = async ev => {
+    const f = ev.target.files && ev.target.files[0];
+    ev.target.value = '';
+    if (!f) return;
+    try {
+      const blob = await TSUCHO.shrinkPhoto(f);
+      const todayKey = TSUCHO.localDate(new Date());
+      const all = await TSUCHO.all();
+      let row = all.find(e => e.kind === 'collagen' && e.date === todayKey);
+      if (!row) row = await TSUCHO.add({ kind: 'collagen', name: 'コラーゲン', stamps: 0, photos: [] });
+      row.photos = (row.photos || []).concat([blob]);
+      await TSUCHO.put(row);
+      render();
+    } catch (e) { alert('写真を保存できませんでした：' + e.message); }
+  };
+
+  let viewing = null;
+  function openViewer(id, i, all) {
+    const row = all.find(e => e.id === id); if (!row) return;
+    viewing = { row, i };
+    $('vImg').src = urlOf(row.photos[i]);
+    $('vDate').textContent = row.date.replace(/-/g, '/');
+    $('viewer').classList.add('show');
+  }
+  $('vClose').onclick = () => $('viewer').classList.remove('show');
+  $('vDel').onclick = async () => {
+    if (!viewing || !confirm('この写真を消しますか？（コラーゲンのハンコは残ります）')) return;
+    viewing.row.photos.splice(viewing.i, 1);
+    await TSUCHO.put(viewing.row);
+    $('viewer').classList.remove('show'); viewing = null; render();
+  };
+
+  $('colUndo').onclick = async () => {
+    const todayKey = TSUCHO.localDate(new Date());
+    const hasPhoto = (await TSUCHO.all()).some(e => e.kind === 'collagen' && e.date === todayKey && e.photos && e.photos.length);
+    if (hasPhoto && !confirm('今日の料理の写真もいっしょに消えます。取り消しますか？')) return;
+    for (const e of await TSUCHO.all()) if (e.kind === 'collagen' && e.date === todayKey) await TSUCHO.remove(e.id);
+    render();
+  };
+  render();
+</script>
+</body>
+</html>

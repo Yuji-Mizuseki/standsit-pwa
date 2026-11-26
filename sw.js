@@ -1,4 +1,4 @@
-const CACHE_NAME = 'standsit-v18';
+const CACHE_NAME = 'standsit-v19';
 
 const BASE = '/standsit-pwa';
 
@@ -8,6 +8,11 @@ const PRECACHE_URLS = [
   BASE + '/measure.html',
   BASE + '/history.html',
   BASE + '/settings.html',
+  BASE + '/kyokin.html',
+  BASE + '/tsucho.html',
+  BASE + '/js/kyokin-exercises.js',
+  BASE + '/js/kyokin-ui.js',
+  BASE + '/js/tsucho-db.js',
   BASE + '/manifest.json',
   BASE + '/icon-192.png',
   BASE + '/icon-512.png',
