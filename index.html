@@ -338,6 +338,17 @@
     .menu img.mi { width: 46px; height: 46px; }
     .menu .mt b { font-size: 22px; }
     .menu .mt span { font-size: 13px; }
+
+    /* ===== v1.11.2 メインビジュアルを画面の幅いっぱいに（左右のバランス） ===== */
+    .container { padding-top: 6px; }
+    .hero-text { height: 90px; height: clamp(70px, 12vh, 150px); height: clamp(70px, 12svh, 150px); margin-bottom: 6px; }
+    .hero-visual {
+      width: calc(100% + 56px); max-width: 520px; height: auto; margin: 0 -28px;
+      max-height: 32vh; max-height: 32svh; object-fit: contain; object-position: center bottom;
+    }
+    .today-card { margin-bottom: 6px; }
+    .menu { gap: 14px; }
+    .menu a { padding: 5px 16px; }
   </style>
 </head>
 <body>
@@ -381,7 +392,7 @@
       <strong>「ホーム画面に追加」</strong> を選んでください
     </div>
 
-    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.11.1</span></p>
+    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.11.2</span></p>
   </div>
 
   <script>
