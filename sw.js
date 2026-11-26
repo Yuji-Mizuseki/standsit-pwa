@@ -1,4 +1,4 @@
-const CACHE_NAME = 'standsit-v42';
+const CACHE_NAME = 'standsit-v43';
 
 const BASE = '/standsit-pwa';
 

@@ -315,6 +315,29 @@
     .today-msg { text-align: left; }
     /* ボタンのアイコン（ChatGPT で作った白い丸のバッジ） */
     .menu img.mi { width: 60px; height: 60px; filter: drop-shadow(0 2px 4px rgba(0,0,0,.18)); }
+
+    /* ===== v1.11 ボタンまで1画面に収める：ロゴと絵は画面の高さに合わせて縮む ===== */
+    .container { padding-top: 10px; }
+    .hero-wrap { margin-bottom: 4px; display: flex; flex-direction: column; }
+    .hero-text {
+      width: auto; max-width: 100%;
+      height: 120px; height: clamp(76px, 15vh, 160px); height: clamp(76px, 15svh, 160px);
+      margin: 0 auto -18px; position: relative; z-index: 1;
+    }
+    .hero-visual {
+      width: auto; max-width: none;
+      height: 180px; height: clamp(108px, 23vh, 250px); height: clamp(108px, 23svh, 250px);
+      margin: 0 -28px 0 auto;
+    }
+    .today-card { margin-bottom: 10px; padding: 2px 6px; }
+    .today-coin { width: 46px; height: 46px; }
+    .today-msg { font-size: 16px; }
+    .today-nums b { font-size: 28px; }
+    .menu { gap: 11px; }
+    .menu a { padding: 10px 16px; border-radius: 22px; }
+    .menu img.mi { width: 52px; height: 52px; }
+    .menu .mt b { font-size: 22px; }
+    .menu .mt span { font-size: 13px; }
   </style>
 </head>
 <body>
@@ -358,7 +381,7 @@
       <strong>「ホーム画面に追加」</strong> を選んでください
     </div>
 
-    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.10.4</span></p>
+    <p class="footer">毎日少しずつ、続けることが大切です 🌸<br><span style="font-size:11px; color: var(--text-dim);">v1.11.0</span></p>
   </div>
 
   <script>
