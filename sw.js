@@ -1,4 +1,4 @@
-const CACHE_NAME = 'standsit-v37';
+const CACHE_NAME = 'standsit-v38';
 
 const BASE = '/standsit-pwa';
 
@@ -18,8 +18,12 @@ const PRECACHE_URLS = [
   BASE + '/icon-512.png',
   BASE + '/icon-maskable-192.png',
   BASE + '/icon-maskable-512.png',
-  BASE + '/img/logo-text.webp',
-  BASE + '/img/visual.webp',
+  BASE + '/img/logo-text-a.webp',
+  BASE + '/img/visual-c.webp',
+  BASE + '/img/btn-kyokin.webp',
+  BASE + '/img/btn-tsucho.webp',
+  BASE + '/img/btn-history.webp',
+  BASE + '/img/btn-settings.webp',
   // MediaPipe
   BASE + '/mediapipe/camera_utils/camera_utils.js',
   BASE + '/mediapipe/drawing_utils/drawing_utils.js',
