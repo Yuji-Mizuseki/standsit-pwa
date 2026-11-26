@@ -12,7 +12,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg:      #ffffff;
-      --bg2:     #e4eefb;
+      --bg2:     #003884;
       --primary: #003884;
       --primary2:#3f7bd0;
       --accent:  #5b8fd8;
@@ -76,7 +76,7 @@
     }
     .section-desc {
       font-size: 14px;
-      color: var(--text-mid);
+      color: #fff;
       line-height: 1.8;
       padding: 14px 16px;
       background: var(--bg2);
@@ -105,7 +105,7 @@
     .sens-card:active { transform: scale(.97); }
     .sens-card.selected {
       border-color: var(--primary);
-      background: #eef4fd;
+      background: #003884;
       box-shadow: 0 4px 18px var(--shadow);
     }
     .sens-icon {
@@ -154,7 +154,7 @@
     .net-card:active { transform: scale(.97); }
     .net-card.selected {
       border-color: var(--primary);
-      background: #eef4fd;
+      background: #003884;
       box-shadow: 0 4px 18px var(--shadow);
     }
     .net-icon {
@@ -221,6 +221,9 @@
       box-shadow: 0 4px 20px var(--shadow);
     }
     .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  
+    /* ===== 濃い青の地（コラーゲン100ブルー）の上は白い文字・線 ===== */
+    .sens-card.selected, .sens-card.selected *, .net-card.selected, .net-card.selected * { color: #fff !important; }
   </style>
 </head>
 <body>

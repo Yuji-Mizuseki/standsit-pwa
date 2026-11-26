@@ -13,7 +13,7 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     :root {
       --bg:       #ffffff;
-      --bg2:      #e4eefb;
+      --bg2:      #003884;
       --primary:  #003884;
       --primary2: #3f7bd0;
       --speed:    #d97b00;
@@ -134,6 +134,9 @@
     }
     .btn-goto.speed { background: linear-gradient(135deg, var(--speed), var(--speed2)); color: #fff; }
     .btn-goto.count { background: linear-gradient(135deg, #ef6c00, #ffa000); color: #fff; }
+  
+    /* ===== 濃い青の地（コラーゲン100ブルー）の上は白い文字・線 ===== */
+    .tabs .tab:not(.active) { color: #fff; }
   </style>
 </head>
 <body>
