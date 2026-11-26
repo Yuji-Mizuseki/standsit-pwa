@@ -40,6 +40,8 @@
     if (vl < 0.35 && vr < 0.35) return null;
     if (vl < 0.35) return { v: b, side: 'R' };
     if (vr < 0.35) return { v: a, side: 'L' };
+    // near：カメラ側（よく見えている方）の脚だけを見る。片足ずつの種目で、隠れた脚の揺れを数えないため
+    if (pick === 'near') return vl >= vr ? { v: a, side: 'L' } : { v: b, side: 'R' };
     return pick === 'max' ? (a >= b ? { v: a, side: 'L' } : { v: b, side: 'R' })
                           : (a <= b ? { v: a, side: 'L' } : { v: b, side: 'R' });
   }
@@ -82,16 +84,16 @@
     },
     {
       id: 'sit-knee', must: 'キック', program: 'sit', name: '膝伸ばし', muscle: '太ももの前（大腿四頭筋）', camera: '横',
-      how: 'いすに座り、片方の膝をゆっくり伸ばして、ゆっくり戻します。左右交互に。',
+      how: 'いすに座り、片方の膝をゆっくり伸ばして、ゆっくり戻します。右足を1セット分やってから、向きを変えて左足を1セット分。',
       joints: LEG_L.concat(LEG_R),
-      measure: lm => bothSides(lm, () => knee(lm, 'L'), () => knee(lm, 'R'), LEG_L, LEG_R, 'max'),
+      measure: lm => bothSides(lm, () => knee(lm, 'L'), () => knee(lm, 'R'), LEG_L, LEG_R, 'near'),
       dir: +1, start: 12, top: 35, good: 60, perLeg: true,
     },
     {
       id: 'sit-thigh', must: 'アップ', program: 'sit', name: 'もも上げ（座位）', muscle: '太ももの付け根（腸腰筋）', camera: '横',
-      how: 'いすに座り、片方の太ももをゆっくり持ち上げて下ろします。左右交互に。',
+      how: 'いすに座り、片方の太ももをゆっくり持ち上げて下ろします。右足を1セット分やってから、向きを変えて左足を1セット分。',
       joints: HIP_L.concat(HIP_R),
-      measure: lm => bothSides(lm, () => hip(lm, 'L'), () => hip(lm, 'R'), HIP_L, HIP_R, 'min'),
+      measure: lm => bothSides(lm, () => hip(lm, 'L'), () => hip(lm, 'R'), HIP_L, HIP_R, 'near'),
       dir: -1, start: 6, top: 14, good: 25, perLeg: true,
     },
     {
@@ -114,14 +116,14 @@
     },
     {
       id: 'std-thigh', must: 'アップ', program: 'stand', name: 'もも上げ（立位）', muscle: '太ももの付け根（腸腰筋）', camera: '横',
-      how: 'いすの背につかまって立ち、片方の太ももをゆっくり上げて下ろします。左右交互に。',
+      how: 'いすの背につかまって立ち、片方の太ももをゆっくり上げて下ろします。右足を1セット分やってから、向きを変えて左足を1セット分。',
       joints: HIP_L.concat(HIP_R),
-      measure: lm => bothSides(lm, () => hip(lm, 'L'), () => hip(lm, 'R'), HIP_L, HIP_R, 'min'),
+      measure: lm => bothSides(lm, () => hip(lm, 'L'), () => hip(lm, 'R'), HIP_L, HIP_R, 'near'),
       dir: -1, start: 10, top: 30, good: 55, perLeg: true,
     },
     {
       id: 'std-side', program: 'stand', name: '横への脚上げ', muscle: 'おしりの横（中殿筋）', camera: '正面',
-      how: 'いすの背につかまって立ち、片脚をゆっくり横へ上げて下ろします。左右交互に。※この種目だけカメラは正面に置きます。',
+      how: 'いすの背につかまって立ち、片脚をゆっくり横へ上げて下ろします。右足を1セット分やってから、左足を1セット分。※この種目だけカメラは正面に置きます。',
       joints: [L.lHip, L.rHip, L.lAnkle, L.rAnkle],
       measure: lm => {
         const v = Math.min(...[L.lHip, L.rHip, L.lAnkle, L.rAnkle].map(i => lm[i].visibility ?? 1));

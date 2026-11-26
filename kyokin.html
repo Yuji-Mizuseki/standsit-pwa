@@ -151,6 +151,12 @@
     .countdown-label { font-size: 20px; font-weight: 700; color: rgba(255,255,255,.88); margin-top: 14px; line-height: 1.6; }
     @keyframes countPop { from { transform: scale(1.6); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
+    /* ===== 左右の切り替え ===== */
+    #sideOverlay { position: fixed; inset: 0; z-index: 55; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 14px; padding: 30px 26px; background: rgba(0,0,0,.55); text-align: center; }
+    #sideOverlay.show { display: flex; }
+    .so-side { font-size: 64px; font-weight: 900; color: #ffe066; line-height: 1; text-shadow: 0 2px 12px rgba(0,0,0,.5); }
+    .so-text { font-size: 18px; font-weight: 700; color: #fff; line-height: 1.7; text-shadow: 0 1px 6px rgba(0,0,0,.6); }
+    .so-btn { width: 100%; max-width: 320px; padding: 18px; border: none; border-radius: 100px; font-size: 19px; font-weight: 900; font-family: inherit; cursor: pointer; color: #fff; background: linear-gradient(135deg, var(--primary), var(--primary2)); box-shadow: 0 4px 18px var(--shadow); }
     /* ===== まとめ（透明オーバーレイ・カメラが見える） ===== */
     #summary { position: fixed; inset: 0; z-index: 50; display: none; flex-direction: column; align-items: center; justify-content: center; gap: 10px; padding: 30px 26px; background: rgba(0,0,0,.35); }
     #summary.show { display: flex; }
@@ -234,6 +240,12 @@
 <div id="countdownOverlay">
   <div class="countdown-number" id="countdownNum">3</div>
   <div class="countdown-label" id="countdownLabel">休みの姿勢で止まってください</div>
+</div>
+
+<div id="sideOverlay">
+  <div class="so-side" id="soSide">左足</div>
+  <div class="so-text" id="soText"></div>
+  <button class="so-btn" id="soGo">準備できた</button>
 </div>
 
 <div id="summary">
@@ -347,7 +359,10 @@
       $('detailName').innerHTML = (ex.must ? '<span class="must-tag">★必須</span>' : '') + ex.name;
       $('detailHow').textContent = ex.how + (ex.must ? `（貯筋のススメ 図５の「${ex.must}」）` : '');
       $('detailRule').innerHTML =
-        `1セット ${perSet}回${ex.perLeg ? '（左右あわせて）' : ''} × ${lv.sets}セットが目標です。` +
+        (ex.perLeg
+          ? `1セット＝<b>右足 ${pc.repsPerSet}回 → ${ex.camera === '横' ? '向きを変えて' : ''}左足 ${pc.repsPerSet}回</b>。× ${lv.sets}セットが目標です。` +
+            (ex.camera === '横' ? '<br>右足のときは体の<b>右側</b>を、左足のときは<b>左側</b>をカメラに向けます。' : '')
+          : `1セット ${perSet}回 × ${lv.sets}セットが目標です。`) +
         (pref.pace === 'slow' ? `<br>1回を <b>${lv.slowSec}秒以上</b> かけてゆっくり。` : '') +
         `<br>息を止めずに、数を声に出しながら。<br>カメラは体の<b>${ex.camera}</b>から、全身が映るように置いてください。` +
         `<br>1セットできるごとに、貯筋通帳にハンコを1つ押します。`;
@@ -362,6 +377,14 @@
   let isMeasuring = false, calibrating = false, calibVals = [];
   let base = null, smooth = [], state = 'rest', repStart = 0, peak = 0, reached = false;
   let reps = 0, durs = [], forms = [], slowOk = 0, saved = false, lastSeen = 0;
+  // 片足ずつの種目：1セット＝右足 n 回 → 左足 n 回。reps の位置から今どちらの足かが決まる
+  const sideOf = r => (!EX || !EX.perLeg) ? null : ((r % perSet) < PC.repsPerSet ? 'R' : 'L');
+  const sideName = s => s === 'R' ? '右足' : '左足';
+  function sideCountText() {
+    if (!EX.perLeg) return;
+    const s = sideOf(reps);
+    $('bigLabel').textContent = `${sideName(s)}　／　${PC.repsPerSet}回`;
+  }
 
   $('launchBtn').onclick = () => {
     EX = K.EXERCISES.find(e => e.id === pref.ex); if (!EX) return;
@@ -380,6 +403,7 @@
 
   $('toPick').onclick = () => {
     stopMeasuring();
+    $('sideOverlay').classList.remove('show');
     $('summary').classList.remove('show'); document.body.classList.remove('summary-on');
     $('pickScreen').classList.remove('hidden');
     renderPick();
@@ -469,7 +493,10 @@
     const isSlow = slowTarget ? sec >= slowTarget : true;
     if (slowTarget && isSlow) slowOk++;
     const n = $('bigNumber');
-    n.textContent = reps % perSet === 0 ? perSet : reps % perSet;
+    if (EX.perLeg) {
+      const inSide = ((reps - 1) % PC.repsPerSet) + 1;   // その足で何回目か
+      n.textContent = inSide;
+    } else n.textContent = reps % perSet === 0 ? perSet : reps % perSet;
     n.classList.add('pulse'); setTimeout(() => n.classList.remove('pulse'), 150);
     $('stSec').textContent = sec.toFixed(1);
     $('stForm').textContent = form;
@@ -483,7 +510,11 @@
     if (reps % perSet === 0) {
       say(`${sets}セット、できました`);
       if (sets >= LV.sets) { setTimeout(() => finish(true), 900); return; }
-    } else say(String(reps % perSet));
+      if (EX.perLeg) { setTimeout(() => askSide('R'), 900); return; }
+    } else if (EX.perLeg && reps % perSet === PC.repsPerSet) {
+      say('右足、できました。左足に替えます');
+      setTimeout(() => askSide('L'), 900); return;
+    } else say(String(EX.perLeg ? ((reps - 1) % PC.repsPerSet) + 1 : reps % perSet));
   }
 
   function drawDots() {
@@ -502,6 +533,7 @@
   function resetCounts() {
     reps = 0; durs = []; forms = []; slowOk = 0; saved = false; state = 'rest'; base = null;
     $('bigNumber').textContent = '0'; $('bigLabel').textContent = `回 ／ ${perSet}回で1セット`;
+    if (EX && EX.perLeg) sideCountText();
     $('stSet').textContent = '0'; $('stSec').textContent = '-'; $('stForm').textContent = '-'; $('stYen').textContent = '0';
     $('gaugeFill').style.height = '0';
     drawDots(); badge('待機中', '');
@@ -512,7 +544,11 @@
   // カウントダウンの最後の1秒で、休みの姿勢の角度を測る＝基準づくり
   function startCountdown(cb) {
     let c = 3; const o = $('countdownOverlay'), num = $('countdownNum');
-    $('countdownLabel').innerHTML = `${EX.program === 'sit' || EX.id === 'std-chair' ? 'いすに座った' : EX.id === 'std-situp' ? 'あおむけの' : '立った'}休みの姿勢で<br>止まってください`;
+    const pose0 = EX.program === 'sit' || EX.id === 'std-chair' ? 'いすに座った' : EX.id === 'std-situp' ? 'あおむけの' : '立った';
+    const s0 = sideOf(reps);
+    $('countdownLabel').innerHTML = s0
+      ? `<b>${sideName(s0)}</b>です。${EX.camera === '横' ? `体の${s0 === 'R' ? '右' : '左'}側をカメラに向け、` : ''}<br>${pose0}休みの姿勢で止まってください`
+      : `${pose0}休みの姿勢で<br>止まってください`;
     num.textContent = c; o.classList.add('show');
     const iv = setInterval(() => {
       c--;
@@ -544,7 +580,26 @@
   };
   $('finishBtn').onclick = () => finish(false);
 
+  // 片足が終わったら止めて、向きを変えてもらう。基準は足が替わるので測り直す
+  function askSide(next) {
+    isMeasuring = false; base = null; state = 'rest'; smooth = [];
+    $('startBtn').textContent = '再開する'; $('startBtn').className = 'btn btn-go';
+    $('panel').classList.remove('measuring');
+    $('soSide').textContent = sideName(next);
+    $('soText').innerHTML = next === 'R'
+      ? `つぎのセットです。${EX.camera === '横' ? '<br>体の<b>右側</b>をカメラに向けてください。' : ''}`
+      : `${EX.camera === '横' ? '体の向きを変えて、<br><b>左側</b>をカメラに向けてください。' : '左足に替えます。'}`;
+    sideCountText(); $('bigNumber').textContent = '0';
+    $('sideOverlay').classList.add('show');
+  }
+  $('soGo').onclick = () => {
+    $('sideOverlay').classList.remove('show');
+    $('startBtn').disabled = true;
+    startCountdown(() => { $('startBtn').disabled = false; beginMeasuring(); });
+  };
+
   function finish(reachedGoal) {
+    $('sideOverlay').classList.remove('show');
     stopMeasuring();
     const sets = Math.floor(reps / perSet);
     const avg = a => a.length ? a.reduce((x, y) => x + y, 0) / a.length : 0;
