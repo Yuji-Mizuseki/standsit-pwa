@@ -1,7 +1,7 @@
 {
-  "name": "立ち座り運動アプリ",
-  "short_name": "立ち座り運動",
-  "description": "椅子からの立ち座り運動を自動計測するPWAアプリ",
+  "name": "コラ100運動アプリ",
+  "short_name": "コラ100運動",
+  "description": "カメラで貯筋運動を数えて、貯筋通帳に記録するアプリ",
   "start_url": "/standsit-pwa/index.html",
   "display": "standalone",
   "background_color": "#fff8f5",
