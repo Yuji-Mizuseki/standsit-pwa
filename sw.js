@@ -1,4 +1,4 @@
-const CACHE_NAME = 'standsit-v40';
+const CACHE_NAME = 'standsit-v41';
 
 const BASE = '/standsit-pwa';
 
@@ -41,7 +41,9 @@ const PRECACHE_URLS = [
 // インストール時に全ファイルをキャッシュ
 self.addEventListener('install', (event) => {
   event.waitUntil(
-    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS))
+    // cache: 'reload' ＝ブラウザに残っている古い写しを使わず、必ず最新を取りに行く
+    //（GitHub Pages は約10分写しを残すため、これが無いと公開直後に古い画面を取り込んで固まる）
+    caches.open(CACHE_NAME).then((cache) => cache.addAll(PRECACHE_URLS.map((u) => new Request(u, { cache: 'reload' }))))
   );
   self.skipWaiting();
 });
@@ -67,6 +69,19 @@ self.addEventListener('fetch', (event) => {
         caches.open(CACHE_NAME).then((c) => c.put(event.request, clone));
         return res;
       }).catch(() => caches.match(event.request).then(c => c || new Response('', { status: 408 })))
+    );
+    return;
+  }
+
+  // ページ（HTML）はネットワーク優先：つながっていれば毎回最新、つながらないときだけ保存分
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request, { cache: 'no-cache' }).then((res) => {
+        const clone = res.clone();
+        caches.open(CACHE_NAME).then((c) => c.put(event.request, clone));
+        return res;
+      }).catch(() => caches.match(event.request, { ignoreSearch: true })
+        .then((c) => c || caches.match(BASE + '/index.html')))
     );
     return;
   }
