@@ -7,7 +7,7 @@
     // 座位：いすと座る人
     sit: `<svg viewBox="0 0 48 48" fill="none" stroke="${C.line}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="20" cy="9" r="4" fill="${C.accent2}" stroke="none"/>
-      <path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="${C.mid}"/></svg>`,
+      <path d="M20 27h9v12" stroke="${C.mid}"/><path d="M20 15v12h12v12"/><path d="M8 24v16M8 30h16M24 30v10" stroke="${C.mid}"/></svg>`,
     // 立位：立つ人といすの背
     stand: `<svg viewBox="0 0 48 48" fill="none" stroke="${C.line}" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
       <circle cx="18" cy="8" r="4" fill="${C.accent2}" stroke="none"/>
@@ -99,7 +99,13 @@
     } else {
       const chain = q => [q.sh, q.hip, q.knee, q.ankle, q.toe].map(pt).join(' ');
       const arm = q => [q.sh, q.hand].map(pt).join(' ');
+      // 奥の脚（横から見て体の向こう側）：少しずらして薄く描く。片足ずつの種目では休みの姿勢のまま
+      const exDef = K.EXERCISES.find(e => e.id === exId);
+      const B2 = exDef && exDef.perLeg ? A : B;
+      const far = q => [q.hip, [q.knee[0] - 5, q.knee[1] - 2], [q.ankle[0] - 5, q.ankle[1]], [q.toe[0] - 5, q.toe[1]]].map(pt).join(' ');
       body = `
+        <polyline fill="none" stroke="${C.mid}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="${far(A)}">
+          ${anim('points', far(A), far(B2))}</polyline>
         <polyline fill="none" stroke="${C.line}" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" points="${arm(A)}">
           ${anim('points', arm(A), arm(B))}</polyline>
         <polyline fill="none" stroke="${C.line}" stroke-width="5" stroke-linecap="round" stroke-linejoin="round" points="${chain(A)}">
